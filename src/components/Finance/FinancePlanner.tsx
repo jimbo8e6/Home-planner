@@ -322,7 +322,7 @@ function IncomeTab({ transactions, setTransactions }: { transactions: Transactio
           <div className="flex gap-2">
             <button onClick={addIncome}
               disabled={!form.amount || parseFloat(form.amount) <= 0}
-              className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${!form.amount || parseFloat(form.amount) <= 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>
+              className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${!form.amount || parseFloat(form.amount) <= 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-gray-700'}`}>
               Save Income {form.amount ? `(£${parseFloat(form.amount || '0').toFixed(2)})` : ''}
             </button>
             <button onClick={() => setShowForm(false)} className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm hover:bg-gray-200">Cancel</button>
@@ -334,7 +334,7 @@ function IncomeTab({ transactions, setTransactions }: { transactions: Transactio
       <div className="flex gap-2 mb-4 flex-wrap">
         {['all', ...INCOME_CATEGORIES.map(c => c.value).filter(v => incomeEntries.some(t => t.category === v))].map(cat => (
           <button key={cat} onClick={() => setFilterCat(cat)}
-            className={`text-xs px-3 py-1.5 rounded-lg font-medium capitalize transition-all ${filterCat === cat ? 'bg-emerald-100 text-emerald-700' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
+            className={`text-xs px-3 py-1.5 rounded-lg font-medium capitalize transition-all ${filterCat === cat ? 'bg-gray-900 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
             {cat === 'all' ? 'All' : cat}
           </button>
         ))}
@@ -402,7 +402,7 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
             {activeBills.length} active · <strong className="text-gray-800">£{monthlyBillsCost.toFixed(2)}/month</strong> · £{(monthlyBillsCost * 12).toFixed(2)}/year
           </p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 font-medium text-sm">
+        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 font-medium text-sm">
           <Plus size={16} /> Add Bill
         </button>
       </div>
@@ -412,8 +412,8 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
           <div className="flex gap-2">
             <input autoFocus placeholder="Bill name (e.g. Mortgage, Council Tax)" value={form.name}
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden w-32 focus-within:ring-2 focus-within:ring-blue-400">
+              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden w-32 focus-within:ring-2 focus-within:ring-gray-300">
               <span className="px-2 py-2.5 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm">£</span>
               <input type="number" step="0.01" placeholder="0.00" value={form.amount}
                 onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
