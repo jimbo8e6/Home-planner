@@ -1,225 +1,9 @@
-import { Calendar, CheckSquare, ShoppingCart, DollarSign, Refrigerator, ChefHat } from 'lucide-react';
+import { format, differenceInDays } from 'date-fns';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import type { CalendarEvent, TodoItem, ShoppingItem, Subscription, FridgeItem, View } from '../types';
-import { format, parseISO, isTomorrow } from 'date-fns';
+import type { CalendarEvent, TodoItem, ShoppingItem, Subscription, FridgeItem, RegularBill, Transaction, View } from '../types';
 
 interface DashboardProps {
   onNavigate: (view: View) => void;
-}
-
-export function Dashboard({ onNavigate }: DashboardProps) {
-  const [events] = useLocalStorage<CalendarEvent[]>('calendar-events', []);
-  const [todos] = useLocalStorage<TodoItem[]>('todos', []);
-  const [shoppingItems] = useLocalStorage<ShoppingItem[]>('shopping-items', []);
-  const [subs] = useLocalStorage<Subscription[]>('subscriptions', []);
-  const [fridgeItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
-
-  const today = new Date();
-  const todayStr = format(today, 'yyyy-MM-dd');
-
-  const todayEvents = events.filter(e => e.date === todayStr);
-  const upcomingEvents = events
-    .filter(e => parseISO(e.date) > today)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(0, 3);
-
-  const pendingTodos = todos.filter(t => !t.completed);
-  const highPriorityTodos = pendingTodos.filter(t => t.priority === 'high').slice(0, 3);
-
-  const uncheckedShopping = shoppingItems.filter(i => !i.checked).length;
-
-  const activeSubs = subs.filter(s => s.active);
-  const monthlySubCost = activeSubs.reduce((sum, s) => {
-    if (s.frequency === 'monthly') return sum + s.amount;
-    if (s.frequency === 'yearly') return sum + s.amount / 12;
-    if (s.frequency === 'weekly') return sum + s.amount * 4.33;
-    return sum;
-  }, 0);
-
-  const expiringSoon = fridgeItems.filter(i => {
-    if (!i.expiryDate) return false;
-    const days = (new Date(i.expiryDate).getTime() - Date.now()) / 86400000;
-    return days >= 0 && days <= 3;
-  });
-
-  const cards = [
-    {
-      view: 'calendar' as View,
-      icon: <Calendar size={22} />,
-      color: 'bg-blue-500',
-      lightColor: 'bg-blue-50',
-      textColor: 'text-blue-600',
-      label: 'Calendar',
-      stat: todayEvents.length > 0 ? `${todayEvents.length} event${todayEvents.length > 1 ? 's' : ''} today` : 'No events today',
-    },
-    {
-      view: 'todo' as View,
-      icon: <CheckSquare size={22} />,
-      color: 'bg-green-500',
-      lightColor: 'bg-green-50',
-      textColor: 'text-green-600',
-      label: 'To-Do',
-      stat: pendingTodos.length > 0 ? `${pendingTodos.length} task${pendingTodos.length > 1 ? 's' : ''} pending` : 'All done!',
-    },
-    {
-      view: 'shopping' as View,
-      icon: <ShoppingCart size={22} />,
-      color: 'bg-orange-500',
-      lightColor: 'bg-orange-50',
-      textColor: 'text-orange-600',
-      label: 'Shopping',
-      stat: uncheckedShopping > 0 ? `${uncheckedShopping} item${uncheckedShopping > 1 ? 's' : ''} to buy` : 'List is clear',
-    },
-    {
-      view: 'finance' as View,
-      icon: <DollarSign size={22} />,
-      color: 'bg-emerald-500',
-      lightColor: 'bg-emerald-50',
-      textColor: 'text-emerald-600',
-      label: 'Finance',
-      stat: `£${monthlySubCost.toFixed(2)}/mo in subscriptions`,
-    },
-    {
-      view: 'fridge' as View,
-      icon: <Refrigerator size={22} />,
-      color: 'bg-sky-500',
-      lightColor: 'bg-sky-50',
-      textColor: 'text-sky-600',
-      label: 'Fridge',
-      stat: expiringSoon.length > 0 ? `${expiringSoon.length} item${expiringSoon.length > 1 ? 's' : ''} expiring soon` : `${fridgeItems.length} item${fridgeItems.length !== 1 ? 's' : ''} stocked`,
-    },
-  ];
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Good {getTimeOfDay()}, let's see what's on today.</h2>
-        <p className="text-gray-500 mt-1">{format(today, 'EEEE, MMMM do yyyy')}</p>
-      </div>
-
-      {/* Summary cards */}
-      <div className="grid grid-cols-5 gap-4">
-        {cards.map(card => (
-          <button key={card.view} onClick={() => onNavigate(card.view)}
-            className="bg-white border border-gray-200 rounded-2xl p-4 text-left hover:shadow-md hover:border-gray-300 transition-all active:scale-95 group">
-            <div className={`w-10 h-10 ${card.lightColor} rounded-xl flex items-center justify-center mb-3 ${card.textColor} group-hover:scale-110 transition-transform`}>
-              {card.icon}
-            </div>
-            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">{card.label}</p>
-            <p className="text-sm font-semibold text-gray-800 mt-1 leading-snug">{card.stat}</p>
-          </button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-2 gap-6">
-        {/* Today's events & upcoming */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-800">Today & Upcoming</h3>
-            <button onClick={() => onNavigate('calendar')} className="text-xs text-blue-500 hover:text-blue-700">View calendar →</button>
-          </div>
-          {todayEvents.length === 0 && upcomingEvents.length === 0 && (
-            <p className="text-sm text-gray-400">Nothing scheduled. <button onClick={() => onNavigate('calendar')} className="text-blue-500 hover:underline">Add an event</button></p>
-          )}
-          {todayEvents.map(e => (
-            <div key={e.id} className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: e.color }} />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate">{e.title}</p>
-                {e.time && <p className="text-xs text-gray-400">{e.time}</p>}
-              </div>
-              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Today</span>
-            </div>
-          ))}
-          {upcomingEvents.map(e => (
-            <div key={e.id} className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: e.color }} />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate">{e.title}</p>
-                <p className="text-xs text-gray-400">{format(parseISO(e.date), 'EEE, MMM d')}</p>
-              </div>
-              {isTomorrow(parseISO(e.date)) && <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Tomorrow</span>}
-            </div>
-          ))}
-        </div>
-
-        {/* Priority tasks */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-800">Priority Tasks</h3>
-            <button onClick={() => onNavigate('todo')} className="text-xs text-green-500 hover:text-green-700">View all →</button>
-          </div>
-          {highPriorityTodos.length === 0 && pendingTodos.length === 0 && (
-            <div className="text-center py-4">
-              <p className="text-2xl mb-1">🎉</p>
-              <p className="text-sm text-gray-400">All tasks complete!</p>
-            </div>
-          )}
-          {highPriorityTodos.length === 0 && pendingTodos.length > 0 && (
-            <p className="text-sm text-gray-400 mb-3">No high-priority tasks</p>
-          )}
-          {highPriorityTodos.map(t => (
-            <div key={t.id} className="flex items-start gap-3 py-2.5 border-b border-gray-50 last:border-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate">{t.text}</p>
-                <p className="text-xs text-gray-400">{t.category}{t.dueDate ? ` · Due ${t.dueDate}` : ''}</p>
-              </div>
-              <span className="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full whitespace-nowrap">High</span>
-            </div>
-          ))}
-          {pendingTodos.filter(t => t.priority !== 'high').slice(0, 2).map(t => (
-            <div key={t.id} className="flex items-start gap-3 py-2.5 border-b border-gray-50 last:border-0 opacity-70">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0" />
-              <p className="text-sm text-gray-700 truncate">{t.text}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Fridge alerts */}
-        {expiringSoon.length > 0 && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">⚠️</span>
-              <h3 className="font-semibold text-amber-800">Expiring Soon</h3>
-              <button onClick={() => onNavigate('fridge')} className="ml-auto text-xs text-amber-600 hover:text-amber-800">View fridge →</button>
-            </div>
-            <div className="space-y-2">
-              {expiringSoon.map(item => (
-                <div key={item.id} className="flex items-center gap-2 text-sm">
-                  <Refrigerator size={14} className="text-amber-500" />
-                  <span className="text-amber-800 font-medium">{item.name}</span>
-                  <span className="text-amber-600 ml-auto text-xs">Use by {item.expiryDate}</span>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => onNavigate('recipes')} className="mt-3 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-100 px-3 py-1.5 rounded-lg hover:bg-amber-200 transition-colors">
-              <ChefHat size={12} /> Find recipes to use these up
-            </button>
-          </div>
-        )}
-
-        {/* Shopping reminder */}
-        {uncheckedShopping > 0 && (
-          <div className="bg-orange-50 border border-orange-200 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <ShoppingCart size={18} className="text-orange-500" />
-              <h3 className="font-semibold text-orange-800">Shopping List</h3>
-              <button onClick={() => onNavigate('shopping')} className="ml-auto text-xs text-orange-600 hover:text-orange-800">View list →</button>
-            </div>
-            <p className="text-sm text-orange-700">You have <strong>{uncheckedShopping} item{uncheckedShopping > 1 ? 's' : ''}</strong> to pick up.</p>
-            <div className="mt-2 flex flex-wrap gap-1">
-              {shoppingItems.filter(i => !i.checked).slice(0, 6).map(item => (
-                <span key={item.id} className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">{item.name}</span>
-              ))}
-              {uncheckedShopping > 6 && <span className="text-xs text-orange-500">+{uncheckedShopping - 6} more</span>}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 }
 
 function getTimeOfDay() {
@@ -227,4 +11,213 @@ function getTimeOfDay() {
   if (h < 12) return 'morning';
   if (h < 17) return 'afternoon';
   return 'evening';
+}
+
+// ─── Section bubble config ────────────────────────────────────────────────────
+
+const SECTIONS: {
+  view: View;
+  label: string;
+  emoji: string;
+  gradient: string;
+  shadowColor: string;
+}[] = [
+  { view: 'calendar',  label: 'Calendar',      emoji: '📅', gradient: 'from-blue-400 to-blue-600',    shadowColor: 'shadow-blue-300' },
+  { view: 'todo',      label: 'To-Do',          emoji: '✅', gradient: 'from-green-400 to-emerald-600', shadowColor: 'shadow-green-300' },
+  { view: 'shopping',  label: 'Shopping',       emoji: '🛒', gradient: 'from-orange-400 to-orange-600', shadowColor: 'shadow-orange-300' },
+  { view: 'finance',   label: 'Finance',        emoji: '💰', gradient: 'from-teal-400 to-emerald-600',  shadowColor: 'shadow-teal-300' },
+  { view: 'fridge',    label: 'Fridge & Cupboard', emoji: '🧊', gradient: 'from-sky-400 to-sky-600',   shadowColor: 'shadow-sky-300' },
+  { view: 'recipes',   label: 'Recipes',        emoji: '👨‍🍳', gradient: 'from-rose-400 to-rose-600',    shadowColor: 'shadow-rose-300' },
+];
+
+// ─── Alert card ───────────────────────────────────────────────────────────────
+
+interface AlertItem {
+  id: string;
+  emoji: string;
+  label: string;
+  sub: string;
+  view: View;
+  accent: string;
+}
+
+function AlertCard({ alert, onNavigate }: { alert: AlertItem; onNavigate: (v: View) => void }) {
+  return (
+    <button
+      onClick={() => onNavigate(alert.view)}
+      className="flex-shrink-0 w-52 bg-white rounded-2xl px-4 py-3.5 shadow-md border border-gray-100 text-left active:scale-95 transition-transform hover:shadow-lg"
+    >
+      <div className="flex items-start gap-3">
+        <span className="text-2xl leading-none mt-0.5">{alert.emoji}</span>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-gray-800 leading-tight">{alert.label}</p>
+          <p className="text-xs text-gray-400 mt-0.5 leading-snug">{alert.sub}</p>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+export function Dashboard({ onNavigate }: DashboardProps) {
+  const [events]       = useLocalStorage<CalendarEvent[]>('calendar-events', []);
+  const [todos]        = useLocalStorage<TodoItem[]>('todos', []);
+  const [shopping]     = useLocalStorage<ShoppingItem[]>('shopping-items', []);
+  const [subs]         = useLocalStorage<Subscription[]>('subscriptions', []);
+  const [bills]        = useLocalStorage<RegularBill[]>('regular-bills', []);
+  const [transactions] = useLocalStorage<Transaction[]>('transactions', []);
+  const [fridge]       = useLocalStorage<FridgeItem[]>('fridge-items', []);
+
+  const today = new Date();
+  const todayStr = format(today, 'yyyy-MM-dd');
+  const thisMonth = todayStr.slice(0, 7);
+
+  // ── Data derivations
+  const todayEvents = events.filter(e => e.date === todayStr);
+  const urgentTodos = todos.filter(t => !t.completed && t.priority === 'high');
+  const overdueTodos = todos.filter(t => !t.completed && t.dueDate && t.dueDate < todayStr);
+  const uncheckedShopping = shopping.filter(s => !s.checked);
+
+  const expiringSoon = fridge.filter(i => {
+    if (!i.expiryDate) return false;
+    const days = differenceInDays(new Date(i.expiryDate), today);
+    return days >= 0 && days <= 3;
+  });
+
+  const billsDueSoon = bills.filter(b => {
+    if (!b.active || !b.nextDueDate) return false;
+    const days = differenceInDays(new Date(b.nextDueDate), today);
+    return days >= 0 && days <= 7;
+  });
+
+  const monthlyIncome = transactions.filter(t => t.type === 'income' && t.date.slice(0, 7) === thisMonth).reduce((s, t) => s + t.amount, 0);
+  const monthlyExpenses = transactions.filter(t => t.type === 'expense' && t.date.slice(0, 7) === thisMonth).reduce((s, t) => s + t.amount, 0);
+  const monthlyBills = bills.filter(b => b.active).reduce((sum, b) => {
+    if (b.frequency === 'monthly') return sum + b.amount;
+    if (b.frequency === 'yearly') return sum + b.amount / 12;
+    if (b.frequency === 'quarterly') return sum + b.amount / 3;
+    if (b.frequency === 'weekly') return sum + b.amount * 4.33;
+    return sum;
+  }, 0);
+  const monthlySubs = subs.filter(s => s.active).reduce((sum, s) => {
+    if (s.frequency === 'monthly') return sum + s.amount;
+    if (s.frequency === 'yearly') return sum + s.amount / 12;
+    if (s.frequency === 'weekly') return sum + s.amount * 4.33;
+    return sum;
+  }, 0);
+  const netThisMonth = monthlyIncome - monthlyExpenses - monthlyBills - monthlySubs;
+
+  // ── Build alert cards
+  const alerts: AlertItem[] = [];
+
+  if (todayEvents.length > 0) {
+    const first = todayEvents[0];
+    alerts.push({ id: 'events', emoji: '📅', view: 'calendar', accent: 'blue',
+      label: `${todayEvents.length} event${todayEvents.length > 1 ? 's' : ''} today`,
+      sub: first.title + (first.time ? ` at ${first.time}` : '') + (todayEvents.length > 1 ? ` +${todayEvents.length - 1} more` : ''),
+    });
+  }
+
+  if (urgentTodos.length > 0) {
+    alerts.push({ id: 'urgent', emoji: '🚨', view: 'todo', accent: 'red',
+      label: `${urgentTodos.length} urgent task${urgentTodos.length > 1 ? 's' : ''}`,
+      sub: urgentTodos[0].text + (urgentTodos.length > 1 ? ` +${urgentTodos.length - 1} more` : ''),
+    });
+  } else if (overdueTodos.length > 0) {
+    alerts.push({ id: 'overdue', emoji: '⏰', view: 'todo', accent: 'orange',
+      label: `${overdueTodos.length} overdue task${overdueTodos.length > 1 ? 's' : ''}`,
+      sub: overdueTodos[0].text,
+    });
+  }
+
+  if (expiringSoon.length > 0) {
+    alerts.push({ id: 'expiry', emoji: '⚠️', view: 'fridge', accent: 'amber',
+      label: `${expiringSoon.length} item${expiringSoon.length > 1 ? 's' : ''} expiring soon`,
+      sub: expiringSoon.map(i => i.name).slice(0, 2).join(', ') + (expiringSoon.length > 2 ? '...' : ''),
+    });
+  }
+
+  if (billsDueSoon.length > 0) {
+    const first = billsDueSoon[0];
+    const days = differenceInDays(new Date(first.nextDueDate), today);
+    alerts.push({ id: 'bills', emoji: '💳', view: 'finance', accent: 'slate',
+      label: `${billsDueSoon.length} bill${billsDueSoon.length > 1 ? 's' : ''} due soon`,
+      sub: `${first.name} ${days === 0 ? 'today' : `in ${days} day${days > 1 ? 's' : ''}`}`,
+    });
+  }
+
+  if (uncheckedShopping.length > 0) {
+    alerts.push({ id: 'shopping', emoji: '🛒', view: 'shopping', accent: 'orange',
+      label: `${uncheckedShopping.length} item${uncheckedShopping.length > 1 ? 's' : ''} to buy`,
+      sub: uncheckedShopping.slice(0, 3).map(i => i.name).join(', ') + (uncheckedShopping.length > 3 ? '...' : ''),
+    });
+  }
+
+  if (monthlyIncome > 0) {
+    alerts.push({ id: 'finance', emoji: netThisMonth >= 0 ? '📈' : '📉', view: 'finance', accent: netThisMonth >= 0 ? 'emerald' : 'red',
+      label: netThisMonth >= 0 ? `£${netThisMonth.toFixed(0)} left this month` : `£${Math.abs(netThisMonth).toFixed(0)} over budget`,
+      sub: `Income £${monthlyIncome.toFixed(0)} · Out £${(monthlyExpenses + monthlyBills + monthlySubs).toFixed(0)}`,
+    });
+  }
+
+  if (alerts.length === 0) {
+    alerts.push({ id: 'clear', emoji: '✨', view: 'dashboard', accent: 'green',
+      label: 'All clear!',
+      sub: 'No urgent items. Enjoy your day.',
+    });
+  }
+
+  // ── Bubble subtitles
+  const bubbleSubtitle: Record<View, string> = {
+    dashboard: '',
+    calendar: todayEvents.length > 0 ? `${todayEvents.length} today` : 'No events today',
+    todo: todos.filter(t => !t.completed).length > 0 ? `${todos.filter(t => !t.completed).length} pending` : 'All done ✓',
+    shopping: uncheckedShopping.length > 0 ? `${uncheckedShopping.length} items` : 'List is clear',
+    finance: `£${(monthlyBills + monthlySubs).toFixed(0)}/mo committed`,
+    fridge: fridge.length > 0 ? `${fridge.length} items stocked` : 'Empty',
+    recipes: fridge.length > 0 ? 'Find what to cook' : 'Add ingredients first',
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* ── Hero header */}
+      <div className="bg-gradient-to-br from-violet-600 via-violet-500 to-indigo-600 px-5 pt-12 pb-14">
+        <p className="text-violet-200 text-sm font-medium tracking-wide">
+          {format(today, 'EEEE, d MMMM yyyy')}
+        </p>
+        <h1 className="text-white text-3xl font-bold mt-1">
+          Good {getTimeOfDay()} 👋
+        </h1>
+        <p className="text-violet-200 text-sm mt-1">Here's what's on today.</p>
+      </div>
+
+      {/* ── Alert strip — overlaps hero with -mt */}
+      <div className="px-4 -mt-6 mb-5">
+        <div className="flex gap-3 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+          {alerts.map(a => (
+            <AlertCard key={a.id} alert={a} onNavigate={onNavigate} />
+          ))}
+        </div>
+      </div>
+
+      {/* ── Section bubbles */}
+      <div className="px-4 pb-10">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Your home</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {SECTIONS.map(s => (
+            <button
+              key={s.view}
+              onClick={() => onNavigate(s.view)}
+              className={`bg-gradient-to-br ${s.gradient} rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-lg ${s.shadowColor} active:scale-95 transition-all duration-150 aspect-square hover:brightness-105`}
+            >
+              <span className="text-4xl leading-none">{s.emoji}</span>
+              <span className="text-white font-bold text-sm text-center leading-tight">{s.label}</span>
+              <span className="text-white/70 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }

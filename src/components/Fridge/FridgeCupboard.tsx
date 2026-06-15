@@ -91,7 +91,7 @@ export function FridgeCupboard() {
   const commonForLocation = COMMON_ITEMS.filter(i => i.location === locationFilter);
 
   return (
-    <div className="flex gap-6">
+    <div className="flex flex-col-reverse sm:flex-row gap-4">
       {/* Main panel */}
       <div className="flex-1">
         {/* Location toggle */}
@@ -208,7 +208,7 @@ export function FridgeCupboard() {
       </div>
 
       {/* Quick-add sidebar */}
-      <div className="w-56 flex-shrink-0">
+      <div className="w-full sm:w-56 flex-shrink-0">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 sticky top-0">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
             Quick add to {locationFilter}

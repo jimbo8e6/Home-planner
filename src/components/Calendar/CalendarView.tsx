@@ -46,7 +46,7 @@ export function CalendarView() {
   const selectedEvents = selectedDate ? events.filter(e => e.date === selectedDate) : [];
 
   return (
-    <div className="flex gap-6 h-full">
+    <div className="flex flex-col sm:flex-row gap-4 h-full">
       <div className="flex-1">
         {/* Month navigation */}
         <div className="flex items-center justify-between mb-4">
@@ -129,7 +129,7 @@ export function CalendarView() {
       </div>
 
       {/* Side panel */}
-      <div className="w-72 flex flex-col gap-4">
+      <div className="w-full sm:w-72 flex flex-col gap-4 flex-shrink-0">
         {selectedDate && (
           <div className="bg-white rounded-2xl border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-3">

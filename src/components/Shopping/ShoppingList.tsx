@@ -117,7 +117,7 @@ export function ShoppingList() {
   const beingSkipped = checkedItems.filter(i => SHOPPING_TO_STORAGE[i.category] === null);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Shopping List</h2>

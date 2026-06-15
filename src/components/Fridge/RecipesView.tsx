@@ -231,7 +231,7 @@ export function RecipesView() {
             </h3>
             <p className="text-sm text-gray-400">Sorted by how many ingredients you already have</p>
           </div>
-          <div className="grid grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {recipes.map(recipe => {
               const ingredients = Array.from({ length: 20 }, (_, i) => recipe[`strIngredient${i + 1}`] || '').filter(Boolean);
               const allItemNames = allItems.map(i => i.name.toLowerCase());

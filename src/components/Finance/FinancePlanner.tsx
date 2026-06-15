@@ -131,7 +131,7 @@ function OverviewTab({ monthlyIncome, monthlyExpenses, monthlyBillsCost, monthly
   return (
     <div className="space-y-5">
       {/* Headline cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl border border-gray-200 p-5">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -193,7 +193,7 @@ function OverviewTab({ monthlyIncome, monthlyExpenses, monthlyBillsCost, monthly
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* Recent income */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
@@ -278,7 +278,7 @@ function IncomeTab({ transactions, setTransactions }: { transactions: Transactio
     .slice().reverse();
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       {/* Summary */}
       <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-5 flex items-center gap-4">
         <div className="flex-1">
@@ -391,7 +391,7 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
   const activeBills = bills.filter(b => b.active);
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm text-gray-500">
@@ -524,7 +524,7 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
   const activeSubs = subs.filter(s => s.active);
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">{activeSubs.length} active · <strong>£{monthlySubCost.toFixed(2)}/month</strong> · £{(monthlySubCost * 12).toFixed(2)}/year</p>
         <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-violet-600 text-white px-4 py-2 rounded-xl hover:bg-violet-700 font-medium text-sm">
@@ -636,7 +636,7 @@ function ExpensesTab({ transactions, setTransactions }: {
   const monthTotal = transactions.filter(t => t.date.slice(0, 7) === thisMonth).reduce((s, t) => s + t.amount, 0);
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">This month: <strong className="text-gray-800">£{monthTotal.toFixed(2)}</strong> in variable expenses</p>
         <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 font-medium text-sm">

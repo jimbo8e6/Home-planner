@@ -45,7 +45,7 @@ export function TodoList() {
   const counts = { all: todos.length, active: todos.filter(t => !t.completed).length, done: todos.filter(t => t.completed).length };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">To-Do List</h2>
