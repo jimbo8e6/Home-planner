@@ -39,6 +39,17 @@ export interface Subscription {
   color: string;
 }
 
+export interface RegularBill {
+  id: string;
+  name: string;
+  amount: number;
+  frequency: 'monthly' | 'yearly' | 'quarterly' | 'weekly';
+  nextDueDate: string;
+  category: string;
+  active: boolean;
+  color: string;
+}
+
 export interface Transaction {
   id: string;
   description: string;
