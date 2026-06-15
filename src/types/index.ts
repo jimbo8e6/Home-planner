@@ -1,4 +1,4 @@
-export type View = 'dashboard' | 'calendar' | 'todo' | 'shopping' | 'finance' | 'fridge';
+export type View = 'dashboard' | 'calendar' | 'todo' | 'shopping' | 'finance' | 'fridge' | 'recipes';
 
 export interface CalendarEvent {
   id: string;
@@ -53,6 +53,7 @@ export interface FridgeItem {
   name: string;
   category: string;
   quantity: string;
+  location: 'fridge' | 'cupboard';
   expiryDate?: string;
 }
 

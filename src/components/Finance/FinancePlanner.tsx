@@ -8,7 +8,7 @@ function generateId() { return Math.random().toString(36).slice(2); }
 
 const SUB_COLORS = ['#6366f1', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
 const SUB_CATEGORIES = ['Streaming', 'Music', 'Software', 'News', 'Gaming', 'Fitness', 'Cloud', 'Other'];
-const TX_CATEGORIES = ['Housing', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Salary', 'Other'];
+const TX_CATEGORIES = ['Housing', 'Groceries', 'Food', 'Transport', 'Utilities', 'Healthcare', 'Entertainment', 'Shopping', 'Salary', 'Other'];
 
 const PRESET_SUBS = [
   { name: 'Netflix', amount: 17.99, frequency: 'monthly' as const, category: 'Streaming', color: '#ef4444' },

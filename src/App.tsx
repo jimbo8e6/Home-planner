@@ -5,7 +5,8 @@ import { CalendarView } from './components/Calendar/CalendarView';
 import { TodoList } from './components/Todo/TodoList';
 import { ShoppingList } from './components/Shopping/ShoppingList';
 import { FinancePlanner } from './components/Finance/FinancePlanner';
-import { FridgeChecker } from './components/Fridge/FridgeChecker';
+import { FridgeCupboard } from './components/Fridge/FridgeCupboard';
+import { RecipesView } from './components/Fridge/RecipesView';
 import type { View } from './types';
 
 const PAGE_TITLES: Record<View, string> = {
@@ -14,16 +15,18 @@ const PAGE_TITLES: Record<View, string> = {
   todo: 'To-Do List',
   shopping: 'Shopping List',
   finance: 'Finance Planner',
-  fridge: 'Fridge & Recipes',
+  fridge: 'Fridge & Cupboard',
+  recipes: 'Recipes',
 };
 
 const PAGE_DESCRIPTIONS: Record<View, string> = {
   dashboard: 'Your home at a glance',
   calendar: 'Plan your schedule',
   todo: 'Track what needs doing',
-  shopping: 'Never forget an item',
+  shopping: 'Tick items off as you shop, then complete your shop to auto-fill your fridge',
   finance: 'Manage money & subscriptions',
-  fridge: "What's in the fridge? Let's cook.",
+  fridge: 'Track what\'s in your fridge and cupboard',
+  recipes: 'Recipes based on what you already have',
 };
 
 export default function App() {
@@ -43,7 +46,8 @@ export default function App() {
           {view === 'todo' && <TodoList />}
           {view === 'shopping' && <ShoppingList />}
           {view === 'finance' && <FinancePlanner />}
-          {view === 'fridge' && <FridgeChecker />}
+          {view === 'fridge' && <FridgeCupboard />}
+          {view === 'recipes' && <RecipesView />}
         </div>
       </main>
     </div>

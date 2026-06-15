@@ -1,4 +1,4 @@
-import { Calendar, CheckSquare, ShoppingCart, DollarSign, Refrigerator, LayoutDashboard } from 'lucide-react';
+import { Calendar, CheckSquare, ShoppingCart, DollarSign, Refrigerator, LayoutDashboard, ChefHat } from 'lucide-react';
 import type { View } from '../../types';
 
 interface SidebarProps {
@@ -12,12 +12,13 @@ const navItems: { view: View; label: string; icon: React.ReactNode; color: strin
   { view: 'todo', label: 'To-Do', icon: <CheckSquare size={20} />, color: 'text-green-600' },
   { view: 'shopping', label: 'Shopping', icon: <ShoppingCart size={20} />, color: 'text-orange-600' },
   { view: 'finance', label: 'Finance', icon: <DollarSign size={20} />, color: 'text-emerald-600' },
-  { view: 'fridge', label: 'Fridge & Recipes', icon: <Refrigerator size={20} />, color: 'text-sky-600' },
+  { view: 'fridge', label: 'Fridge & Cupboard', icon: <Refrigerator size={20} />, color: 'text-sky-600' },
+  { view: 'recipes', label: 'Recipes', icon: <ChefHat size={20} />, color: 'text-rose-600' },
 ];
 
 export function Sidebar({ current, onNavigate }: SidebarProps) {
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col min-h-screen shadow-sm">
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col min-h-screen shadow-sm flex-shrink-0">
       <div className="p-6 border-b border-gray-100">
         <h1 className="text-xl font-bold text-gray-900">HomeBase</h1>
         <p className="text-xs text-gray-500 mt-1">Your home, organised</p>

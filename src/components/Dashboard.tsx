@@ -194,7 +194,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
               ))}
             </div>
-            <button onClick={() => onNavigate('fridge')} className="mt-3 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-100 px-3 py-1.5 rounded-lg hover:bg-amber-200 transition-colors">
+            <button onClick={() => onNavigate('recipes')} className="mt-3 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-100 px-3 py-1.5 rounded-lg hover:bg-amber-200 transition-colors">
               <ChefHat size={12} /> Find recipes to use these up
             </button>
           </div>
