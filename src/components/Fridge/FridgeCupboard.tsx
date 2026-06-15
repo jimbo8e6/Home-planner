@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, X, Search, ShoppingCart, AlertCircle } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { FridgeItem, ShoppingItem } from '../../types';
 
 function generateId() { return Math.random().toString(36).slice(2); }
@@ -57,11 +58,13 @@ export function FridgeCupboard() {
     if (!form.name.trim()) return;
     setItems(prev => [...prev, { id: generateId(), name: form.name, category: form.category, quantity: form.quantity, location: form.location, expiryDate: form.expiryDate }]);
     setForm(f => ({ ...f, name: '', quantity: '', expiryDate: '' }));
+    triggerAchievementCheck();
   };
 
   const addCommon = (item: typeof COMMON_ITEMS[0]) => {
     if (items.some(i => i.name.toLowerCase() === item.name.toLowerCase())) return;
     setItems(prev => [...prev, { id: generateId(), name: item.name, category: item.category, quantity: '', location: item.location }]);
+    triggerAchievementCheck();
   };
 
   const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id));

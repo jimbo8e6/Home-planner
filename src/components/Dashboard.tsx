@@ -4,6 +4,7 @@ import type { CalendarEvent, TodoItem, ShoppingItem, Subscription, FridgeItem, R
 
 interface DashboardProps {
   onNavigate: (view: View) => void;
+  onOpenAchievements: () => void;
 }
 
 function getTimeOfDay() {
@@ -60,7 +61,7 @@ function AlertCard({ alert, onNavigate }: { alert: AlertItem; onNavigate: (v: Vi
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function Dashboard({ onNavigate }: DashboardProps) {
+export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
   const [events]       = useLocalStorage<CalendarEvent[]>('calendar-events', []);
   const [todos]        = useLocalStorage<TodoItem[]>('todos', []);
   const [shopping]     = useLocalStorage<ShoppingItem[]>('shopping-items', []);
@@ -183,9 +184,17 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     <div className="min-h-screen bg-gray-50">
       {/* ── Hero header */}
       <div className="bg-gradient-to-br from-violet-600 via-violet-500 to-indigo-600 px-5 pt-12 pb-14">
-        <p className="text-violet-200 text-sm font-medium tracking-wide">
-          {format(today, 'EEEE, d MMMM yyyy')}
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-violet-200 text-sm font-medium tracking-wide">
+            {format(today, 'EEEE, d MMMM yyyy')}
+          </p>
+          <button
+            onClick={onOpenAchievements}
+            className="flex items-center gap-1.5 text-white/80 hover:text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition-all font-medium"
+          >
+            🏆 Achievements
+          </button>
+        </div>
         <h1 className="text-white text-3xl font-bold mt-1">
           Good {getTimeOfDay()} 👋
         </h1>

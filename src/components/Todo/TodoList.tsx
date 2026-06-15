@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, X, Flag, Calendar, Tag } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { TodoItem } from '../../types';
 
 function generateId() { return Math.random().toString(36).slice(2); }
@@ -30,7 +31,10 @@ export function TodoList() {
     setShowForm(false);
   };
 
-  const toggle = (id: string) => setTodos(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  const toggle = (id: string) => {
+    setTodos(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+    triggerAchievementCheck();
+  };
   const remove = (id: string) => setTodos(prev => prev.filter(t => t.id !== id));
 
   const filtered = todos

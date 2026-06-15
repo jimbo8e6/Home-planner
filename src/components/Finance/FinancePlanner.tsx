@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, X, TrendingUp, TrendingDown, ToggleLeft, ToggleRight, Wallet, Receipt, CreditCard, Building2 } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { Subscription, Transaction, RegularBill } from '../../types';
 import { format, parseISO } from 'date-fns';
 
@@ -270,6 +271,7 @@ function IncomeTab({ transactions, setTransactions }: { transactions: Transactio
     }]);
     setForm(f => ({ ...f, description: '', amount: '' }));
     setShowForm(false);
+    triggerAchievementCheck();
   };
 
   const remove = (id: string) => setTransactions(prev => prev.filter(t => t.id !== id));
@@ -378,11 +380,13 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
     setBills(prev => [...prev, { id: generateId(), name: form.name, amount: parseFloat(form.amount), frequency: form.frequency, nextDueDate: form.nextDueDate || new Date().toISOString().slice(0, 10), category: form.category, active: true, color: form.color }]);
     setForm({ name: '', amount: '', frequency: 'monthly', category: 'Mortgage/Rent', nextDueDate: '', color: BILL_COLORS[0] });
     setShowForm(false);
+    triggerAchievementCheck();
   };
 
   const addPreset = (p: typeof PRESET_BILLS[0]) => {
     if (bills.some(b => b.name === p.name)) return;
     setBills(prev => [...prev, { id: generateId(), ...p, nextDueDate: new Date().toISOString().slice(0, 10), active: true }]);
+    triggerAchievementCheck();
   };
 
   const toggle = (id: string) => setBills(prev => prev.map(b => b.id === id ? { ...b, active: !b.active } : b));
@@ -512,11 +516,13 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
     setSubs(prev => [...prev, { id: generateId(), name: form.name, amount: parseFloat(form.amount), frequency: form.frequency, nextBillingDate: form.nextBillingDate || new Date().toISOString().slice(0, 10), category: form.category, active: true, color: form.color }]);
     setForm({ name: '', amount: '', frequency: 'monthly', category: 'Streaming', nextBillingDate: '', color: SUB_COLORS[0] });
     setShowForm(false);
+    triggerAchievementCheck();
   };
 
   const addPreset = (p: typeof PRESET_SUBS[0]) => {
     if (subs.some(s => s.name === p.name)) return;
     setSubs(prev => [...prev, { id: generateId(), ...p, nextBillingDate: new Date().toISOString().slice(0, 10), active: true }]);
+    triggerAchievementCheck();
   };
 
   const toggle = (id: string) => setSubs(prev => prev.map(s => s.id === id ? { ...s, active: !s.active } : s));

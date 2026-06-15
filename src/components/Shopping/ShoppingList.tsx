@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, X, ShoppingCart, Trash2, CheckCircle } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { ShoppingItem, FridgeItem, Transaction } from '../../types';
 
 function generateId() { return Math.random().toString(36).slice(2); }
@@ -92,6 +93,7 @@ export function ShoppingList() {
     setItems(prev => prev.filter(i => !i.checked));
     setCompleted(true);
     setShopCost('');
+    triggerAchievementCheck();
   };
 
   const closeModal = () => {

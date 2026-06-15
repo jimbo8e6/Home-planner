@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, X, Clock } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, isSameMonth, isSameDay, parseISO } from 'date-fns';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { CalendarEvent } from '../../types';
 
 const EVENT_COLORS = ['#6366f1', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
@@ -39,6 +40,7 @@ export function CalendarView() {
     setEvents(prev => [...prev, newEvent]);
     setForm({ title: '', time: '', description: '', color: EVENT_COLORS[0] });
     setShowForm(false);
+    triggerAchievementCheck();
   };
 
   const removeEvent = (id: string) => setEvents(prev => prev.filter(e => e.id !== id));

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ChefHat, Loader2, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { trackRecipeSearch, triggerAchievementCheck } from '../../achievements/definitions';
 import type { FridgeItem, Recipe } from '../../types';
 
 function itemToSearchTerms(itemName: string): string[] {
@@ -114,6 +115,8 @@ export function RecipesView() {
     setError('');
     setRecipes([]);
     setSelected(null);
+    trackRecipeSearch();
+    triggerAchievementCheck();
 
     try {
       const searchTerms = allItems.flatMap(i => itemToSearchTerms(i.name));
