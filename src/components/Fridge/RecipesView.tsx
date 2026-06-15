@@ -190,7 +190,7 @@ export function RecipesView() {
         </div>
         <div className="ml-auto">
           <button onClick={findRecipes} disabled={loading || allItems.length === 0}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${allItems.length === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-rose-600 text-white hover:bg-rose-700 active:scale-95'}`}>
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${allItems.length === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-gray-700 active:scale-95'}`}>
             {loading ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
             {loading ? 'Searching...' : searched ? 'Refresh' : 'Find Recipes'}
           </button>
@@ -206,7 +206,7 @@ export function RecipesView() {
 
       {!searched && !loading && allItems.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <ChefHat size={64} className="text-rose-200 mb-4" />
+          <ChefHat size={64} className="text-gray-300 mb-4" />
           <h3 className="text-xl font-semibold text-gray-700 mb-2">Nothing in the fridge yet</h3>
           <p className="text-gray-400 max-w-sm">Add ingredients to your Fridge & Cupboard first, then come back here to find recipes that match what you have.</p>
         </div>

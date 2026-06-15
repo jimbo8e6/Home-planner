@@ -20,15 +20,13 @@ const SECTIONS: {
   view: View;
   label: string;
   emoji: string;
-  gradient: string;
-  shadowColor: string;
 }[] = [
-  { view: 'calendar',  label: 'Calendar',      emoji: '📅', gradient: 'from-blue-400 to-blue-600',    shadowColor: 'shadow-blue-300' },
-  { view: 'todo',      label: 'To-Do',          emoji: '✅', gradient: 'from-green-400 to-emerald-600', shadowColor: 'shadow-green-300' },
-  { view: 'shopping',  label: 'Shopping',       emoji: '🛒', gradient: 'from-orange-400 to-orange-600', shadowColor: 'shadow-orange-300' },
-  { view: 'finance',   label: 'Finance',        emoji: '💰', gradient: 'from-teal-400 to-emerald-600',  shadowColor: 'shadow-teal-300' },
-  { view: 'fridge',    label: 'Fridge & Cupboard', emoji: '🧊', gradient: 'from-sky-400 to-sky-600',   shadowColor: 'shadow-sky-300' },
-  { view: 'recipes',   label: 'Recipes',        emoji: '👨‍🍳', gradient: 'from-rose-400 to-rose-600',    shadowColor: 'shadow-rose-300' },
+  { view: 'calendar',  label: 'Calendar',         emoji: '📅' },
+  { view: 'todo',      label: 'To-Do',             emoji: '✅' },
+  { view: 'shopping',  label: 'Shopping',          emoji: '🛒' },
+  { view: 'finance',   label: 'Finance',           emoji: '💰' },
+  { view: 'fridge',    label: 'Fridge & Cupboard', emoji: '🧊' },
+  { view: 'recipes',   label: 'Recipes',           emoji: '👨‍🍳' },
 ];
 
 // ─── Alert card ───────────────────────────────────────────────────────────────
@@ -183,9 +181,9 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ── Hero header */}
-      <div className="bg-gradient-to-br from-violet-600 via-violet-500 to-indigo-600 px-5 pt-12 pb-14">
+      <div className="bg-gray-900 px-5 pt-12 pb-14">
         <div className="flex items-center justify-between">
-          <p className="text-violet-200 text-sm font-medium tracking-wide">
+          <p className="text-gray-400 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
           </p>
           <button
@@ -198,7 +196,7 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
         <h1 className="text-white text-3xl font-bold mt-1">
           Good {getTimeOfDay()} 👋
         </h1>
-        <p className="text-violet-200 text-sm mt-1">Here's what's on today.</p>
+        <p className="text-gray-400 text-sm mt-1">Here's what's on today.</p>
       </div>
 
       {/* ── Alert strip — overlaps hero with -mt */}
@@ -218,11 +216,11 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
             <button
               key={s.view}
               onClick={() => onNavigate(s.view)}
-              className={`bg-gradient-to-br ${s.gradient} rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-lg ${s.shadowColor} active:scale-95 transition-all duration-150 aspect-square hover:brightness-105`}
+              className="bg-gray-800 hover:bg-gray-700 rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-md shadow-gray-900/20 active:scale-95 transition-all duration-150 aspect-square"
             >
               <span className="text-4xl leading-none">{s.emoji}</span>
               <span className="text-white font-bold text-sm text-center leading-tight">{s.label}</span>
-              <span className="text-white/70 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
+              <span className="text-gray-400 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
             </button>
           ))}
         </div>

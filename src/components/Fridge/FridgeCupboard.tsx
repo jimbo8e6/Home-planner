@@ -101,11 +101,11 @@ export function FridgeCupboard() {
         <div className="flex items-center gap-3 mb-5">
           <div className="flex bg-gray-100 p-1 rounded-xl gap-1">
             <button onClick={() => { setLocationFilter('fridge'); setForm(f => ({ ...f, location: 'fridge' })); }}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === 'fridge' ? 'bg-white text-sky-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === 'fridge' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
               🧊 Fridge <span className="ml-1 text-xs text-gray-400">({fridgeCount})</span>
             </button>
             <button onClick={() => { setLocationFilter('cupboard'); setForm(f => ({ ...f, location: 'cupboard' })); }}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === 'cupboard' ? 'bg-white text-amber-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === 'cupboard' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
               🗄️ Cupboard <span className="ml-1 text-xs text-gray-400">({cupboardCount})</span>
             </button>
           </div>
@@ -119,24 +119,24 @@ export function FridgeCupboard() {
 
         {/* Search + add */}
         <div className="flex gap-2 mb-4">
-          <div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-xl bg-white px-3 focus-within:ring-2 focus-within:ring-sky-400">
+          <div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-xl bg-white px-3 focus-within:ring-2 focus-within:ring-gray-300">
             <Search size={16} className="text-gray-400 flex-shrink-0" />
             <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder={`Search ${locationFilter}...`}
               className="flex-1 py-2.5 text-sm focus:outline-none bg-transparent" />
           </div>
           <button onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-1.5 bg-sky-600 text-white pl-3 pr-4 py-2.5 rounded-xl hover:bg-sky-700 font-semibold text-sm whitespace-nowrap">
+            className="flex items-center gap-1.5 bg-gray-900 text-white pl-3 pr-4 py-2.5 rounded-xl hover:bg-gray-700 font-semibold text-sm whitespace-nowrap">
             <Plus size={15} /> Add Item
           </button>
         </div>
 
         {/* Add form */}
         {showForm && (
-          <div className="bg-white border border-sky-200 rounded-2xl p-4 mb-4 shadow-sm space-y-3">
+          <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 shadow-sm space-y-3">
             <div className="flex gap-2">
               <input autoFocus placeholder="Item name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                 onKeyDown={e => e.key === 'Enter' && addItem()}
-                className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+                className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
               <input placeholder="Qty (e.g. 2)" value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))}
                 className="w-28 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none" />
             </div>
@@ -156,7 +156,7 @@ export function FridgeCupboard() {
               )}
             </div>
             <div className="flex gap-2">
-              <button onClick={addItem} className="bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sky-700">Add</button>
+              <button onClick={addItem} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Add</button>
               <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
             </div>
           </div>

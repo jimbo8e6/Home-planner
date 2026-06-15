@@ -99,7 +99,7 @@ export function FinancePlanner() {
       <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-xl w-fit flex-wrap">
         {tabs.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
             {tab.label}
           </button>
         ))}
@@ -282,31 +282,31 @@ function IncomeTab({ transactions, setTransactions }: { transactions: Transactio
   return (
     <div className="w-full">
       {/* Summary */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-5 flex items-center gap-4">
+      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-5 flex items-center gap-4">
         <div className="flex-1">
-          <p className="text-sm text-emerald-700 font-medium">This month's income</p>
-          <p className="text-3xl font-bold text-emerald-700">£{thisMonthTotal.toFixed(2)}</p>
+          <p className="text-sm text-gray-800 font-medium">This month's income</p>
+          <p className="text-3xl font-bold text-gray-800">£{thisMonthTotal.toFixed(2)}</p>
         </div>
         <button onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl hover:bg-emerald-700 font-medium text-sm">
+          className="flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-xl hover:bg-gray-700 font-medium text-sm">
           <Plus size={16} /> Add Income
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-white border border-emerald-200 rounded-2xl p-5 mb-5 shadow-sm space-y-3">
+        <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-5 shadow-sm space-y-3">
           <h4 className="font-semibold text-gray-800">Record income</h4>
           {/* Category tiles */}
           <div className="grid grid-cols-3 gap-2">
             {INCOME_CATEGORIES.map(cat => (
               <button key={cat.value} onClick={() => setForm(f => ({ ...f, category: cat.value }))}
-                className={`text-left px-3 py-2.5 rounded-xl text-sm border transition-all ${form.category === cat.value ? 'border-emerald-400 bg-emerald-50 text-emerald-800 font-medium' : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`}>
+                className={`text-left px-3 py-2.5 rounded-xl text-sm border transition-all ${form.category === cat.value ? 'border-gray-900 bg-gray-100 text-gray-900 font-medium' : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`}>
                 {cat.label}
               </button>
             ))}
           </div>
           <div className="flex gap-2">
-            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-emerald-400 flex-1">
+            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-300 flex-1">
               <span className="px-3 py-2.5 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm font-medium">£</span>
               <input autoFocus type="number" step="0.01" placeholder="0.00" value={form.amount}
                 onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
@@ -314,11 +314,11 @@ function IncomeTab({ transactions, setTransactions }: { transactions: Transactio
                 className="flex-1 px-3 py-2.5 text-sm focus:outline-none" />
             </div>
             <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-              className="text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+              className="text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300" />
           </div>
           <input placeholder="Description (optional — defaults to category)" value={form.description}
             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-            className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+            className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
           <div className="flex gap-2">
             <button onClick={addIncome}
               disabled={!form.amount || parseFloat(form.amount) <= 0}

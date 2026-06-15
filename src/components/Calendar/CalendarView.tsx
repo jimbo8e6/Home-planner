@@ -64,7 +64,7 @@ export function CalendarView() {
             </button>
             <button
               onClick={() => setCurrentDate(new Date())}
-              className="px-3 py-1 text-sm rounded-lg bg-violet-100 text-violet-700 font-medium"
+              className="px-3 py-1 text-sm rounded-lg bg-gray-100 text-gray-700 font-medium"
             >
               Today
             </button>
@@ -99,14 +99,14 @@ export function CalendarView() {
                 onClick={() => setSelectedDate(isSelected ? null : dateStr)}
                 className={`min-h-[80px] p-1.5 rounded-xl text-left transition-all border ${
                   isSelected
-                    ? 'border-violet-400 bg-violet-50'
+                    ? 'border-gray-900 bg-gray-50'
                     : isToday
-                    ? 'border-violet-200 bg-violet-50/50'
+                    ? 'border-gray-300 bg-gray-50'
                     : 'border-transparent hover:border-gray-200 hover:bg-gray-50'
                 } ${!isCurrentMonth ? 'opacity-40' : ''}`}
               >
                 <span className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full ${
-                  isToday ? 'bg-violet-600 text-white' : 'text-gray-700'
+                  isToday ? 'bg-gray-900 text-white' : 'text-gray-700'
                 }`}>
                   {format(day, 'd')}
                 </span>
@@ -140,7 +140,7 @@ export function CalendarView() {
               </h3>
               <button
                 onClick={() => { setShowForm(true); }}
-                className="flex items-center gap-1 text-xs bg-violet-600 text-white px-2.5 py-1.5 rounded-lg hover:bg-violet-700"
+                className="flex items-center gap-1 text-xs bg-gray-900 text-white px-2.5 py-1.5 rounded-lg hover:bg-gray-700"
               >
                 <Plus size={14} /> Add
               </button>
@@ -153,19 +153,19 @@ export function CalendarView() {
                   placeholder="Event title"
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <input
                   type="time"
                   value={form.time}
                   onChange={e => setForm(f => ({ ...f, time: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <input
                   placeholder="Notes (optional)"
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <div className="flex gap-1.5">
                   {EVENT_COLORS.map(c => (
@@ -178,7 +178,7 @@ export function CalendarView() {
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={addEvent} className="flex-1 bg-violet-600 text-white text-sm py-1.5 rounded-lg hover:bg-violet-700">
+                  <button onClick={addEvent} className="flex-1 bg-gray-900 text-white text-sm py-1.5 rounded-lg hover:bg-gray-700">
                     Save
                   </button>
                   <button onClick={() => setShowForm(false)} className="flex-1 bg-gray-200 text-gray-700 text-sm py-1.5 rounded-lg hover:bg-gray-300">

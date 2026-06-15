@@ -129,7 +129,7 @@ export function ShoppingList() {
           {checked > 0 && (
             <>
               <button onClick={() => { setShowCompleteModal(true); setCompleted(false); }}
-                className="flex items-center gap-1.5 text-sm bg-green-600 text-white px-3 py-2 rounded-xl hover:bg-green-700 font-medium">
+                className="flex items-center gap-1.5 text-sm bg-gray-900 text-white px-3 py-2 rounded-xl hover:bg-gray-700 font-medium">
                 <CheckCircle size={15} /> Complete Shop
               </button>
               <button onClick={clearChecked} className="flex items-center gap-1.5 text-sm text-red-600 border border-red-200 px-3 py-2 rounded-xl hover:bg-red-50">
@@ -137,7 +137,7 @@ export function ShoppingList() {
               </button>
             </>
           )}
-          <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 font-medium text-sm">
+          <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 font-medium text-sm">
             <Plus size={16} /> Add Item
           </button>
         </div>
@@ -148,16 +148,16 @@ export function ShoppingList() {
           <div className="flex gap-2 mb-3">
             <input autoFocus placeholder="Item name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && addItem()}
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400" />
+              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
             <input placeholder="Qty" value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))}
-              className="w-20 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400" />
+              className="w-20 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
           </div>
           <div className="flex gap-2">
             <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
               className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none">
               {CATEGORIES.map(c => <option key={c}>{c}</option>)}
             </select>
-            <button onClick={addItem} className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-600">Add</button>
+            <button onClick={addItem} className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-700">Add</button>
             <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-sm hover:bg-gray-200">✕</button>
           </div>
         </div>
@@ -180,7 +180,7 @@ export function ShoppingList() {
       <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
         {['all', ...CATEGORIES.filter(c => items.some(i => i.category === c))].map(c => (
           <button key={c} onClick={() => setCatFilter(c)}
-            className={`text-xs px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all ${catFilter === c ? 'bg-orange-100 text-orange-700' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
+            className={`text-xs px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all ${catFilter === c ? 'bg-gray-900 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
             {c === 'all' ? 'All' : c}
           </button>
         ))}
@@ -202,7 +202,7 @@ export function ShoppingList() {
               </div>
               {catItems.map(item => (
                 <div key={item.id} className={`flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 group ${item.checked ? 'opacity-50' : ''}`}>
-                  <input type="checkbox" checked={item.checked} onChange={() => toggle(item.id)} className="w-4 h-4 accent-orange-500 cursor-pointer flex-shrink-0" />
+                  <input type="checkbox" checked={item.checked} onChange={() => toggle(item.id)} className="w-4 h-4 accent-gray-900 cursor-pointer flex-shrink-0" />
                   <span className={`flex-1 text-sm ${item.checked ? 'line-through text-gray-400' : 'text-gray-800'}`}>{item.name}</span>
                   <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{item.quantity}</span>
                   <button onClick={() => remove(item.id)} className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all">
@@ -229,7 +229,7 @@ export function ShoppingList() {
                 {goingToFridge.length + goingToCupboard.length > 0 && (
                   <p className="text-gray-500 text-sm">{goingToFridge.length + goingToCupboard.length} items added to your Fridge & Cupboard.</p>
                 )}
-                <button onClick={closeModal} className="mt-6 bg-green-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-green-700 w-full">Done</button>
+                <button onClick={closeModal} className="mt-6 bg-gray-900 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-gray-700 w-full">Done</button>
               </div>
             ) : (
               <>
@@ -244,7 +244,7 @@ export function ShoppingList() {
                   {/* Cost input */}
                   <div>
                     <label className="text-sm font-medium text-gray-700 mb-1.5 block">Total cost</label>
-                    <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-green-400">
+                    <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-300">
                       <span className="px-3 py-2.5 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm font-medium">£</span>
                       <input
                         autoFocus
@@ -263,7 +263,7 @@ export function ShoppingList() {
                   <div>
                     <label className="text-sm font-medium text-gray-700 mb-1.5 block">Description</label>
                     <input value={shopDescription} onChange={e => setShopDescription(e.target.value)}
-                      className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-400" />
+                      className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
                   </div>
 
                   {/* Preview */}
@@ -293,7 +293,7 @@ export function ShoppingList() {
                   <button
                     onClick={completeShop}
                     disabled={!shopCost || parseFloat(shopCost) <= 0}
-                    className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${!shopCost || parseFloat(shopCost) <= 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                    className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${!shopCost || parseFloat(shopCost) <= 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-gray-700'}`}
                   >
                     Complete & Save (£{parseFloat(shopCost || '0').toFixed(2)})
                   </button>

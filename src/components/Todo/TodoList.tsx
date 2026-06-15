@@ -57,7 +57,7 @@ export function TodoList() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 font-medium text-sm"
+          className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 font-medium text-sm"
         >
           <Plus size={16} /> Add Task
         </button>
@@ -71,7 +71,7 @@ export function TodoList() {
             value={form.text}
             onChange={e => setForm(f => ({ ...f, text: e.target.value }))}
             onKeyDown={e => e.key === 'Enter' && addTodo()}
-            className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300"
           />
           <div className="flex gap-3 flex-wrap">
             <select value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value as TodoItem['priority'] }))}
@@ -88,7 +88,7 @@ export function TodoList() {
               className="text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none" />
           </div>
           <div className="flex gap-2">
-            <button onClick={addTodo} className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700">Add Task</button>
+            <button onClick={addTodo} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Add Task</button>
             <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function TodoList() {
       <div className="flex gap-2 mb-4 flex-wrap">
         {(['all', 'active', 'done'] as const).map(f => (
           <button key={f} onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${filter === f ? 'bg-green-100 text-green-700' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${filter === f ? 'bg-gray-900 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
             {f} ({counts[f]})
           </button>
         ))}
@@ -125,7 +125,7 @@ export function TodoList() {
               type="checkbox"
               checked={todo.completed}
               onChange={() => toggle(todo.id)}
-              className="mt-0.5 w-4 h-4 accent-green-600 cursor-pointer flex-shrink-0"
+              className="mt-0.5 w-4 h-4 accent-gray-900 cursor-pointer flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
               <p className={`text-sm font-medium ${todo.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>{todo.text}</p>
