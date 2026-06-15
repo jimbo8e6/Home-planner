@@ -117,12 +117,12 @@ export function FridgeCupboard() {
         {/* Search + add */}
         <div className="flex gap-2 mb-4">
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder={`Search ${locationFilter}...`}
-              className="w-full pl-8 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white" />
+              className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white" />
           </div>
           <button onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 bg-sky-600 text-white px-4 py-2 rounded-xl hover:bg-sky-700 font-medium text-sm">
+            className="flex items-center gap-2 bg-sky-600 text-white px-4 py-2.5 rounded-xl hover:bg-sky-700 font-semibold text-sm whitespace-nowrap">
             <Plus size={16} /> Add Item
           </button>
         </div>
