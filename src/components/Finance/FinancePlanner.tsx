@@ -446,7 +446,7 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={addBill} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Save</button>
+            <button onClick={addBill} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Save</button>
             <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
           </div>
         </div>
@@ -533,7 +533,7 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">{activeSubs.length} active · <strong>£{monthlySubCost.toFixed(2)}/month</strong> · £{(monthlySubCost * 12).toFixed(2)}/year</p>
-        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-violet-600 text-white px-4 py-2 rounded-xl hover:bg-violet-700 font-medium text-sm">
+        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 font-medium text-sm">
           <Plus size={16} /> Add
         </button>
       </div>
@@ -542,8 +542,8 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
         <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 shadow-sm space-y-3">
           <div className="flex gap-2">
             <input autoFocus placeholder="Service name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-400" />
-            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden w-32 focus-within:ring-2 focus-within:ring-violet-400">
+              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden w-32 focus-within:ring-2 focus-within:ring-gray-300">
               <span className="px-2 py-2.5 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm">£</span>
               <input type="number" step="0.01" placeholder="0.00" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
                 className="flex-1 px-2 py-2.5 text-sm focus:outline-none" />
@@ -571,7 +571,7 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
             ))}
           </div>
           <div className="flex gap-2">
-            <button onClick={addSub} className="bg-violet-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-violet-700">Save</button>
+            <button onClick={addSub} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Save</button>
             <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
           </div>
         </div>
@@ -645,7 +645,7 @@ function ExpensesTab({ transactions, setTransactions }: {
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">This month: <strong className="text-gray-800">£{monthTotal.toFixed(2)}</strong> in variable expenses</p>
-        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 font-medium text-sm">
+        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 font-medium text-sm">
           <Plus size={16} /> Add Expense
         </button>
       </div>
@@ -655,8 +655,8 @@ function ExpensesTab({ transactions, setTransactions }: {
           <div className="flex gap-2">
             <input autoFocus placeholder="What did you spend on?" value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400" />
-            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden w-32 focus-within:ring-2 focus-within:ring-orange-400">
+              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden w-32 focus-within:ring-2 focus-within:ring-gray-300">
               <span className="px-2 py-2.5 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm">£</span>
               <input type="number" step="0.01" placeholder="0.00" value={form.amount}
                 onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
@@ -673,7 +673,7 @@ function ExpensesTab({ transactions, setTransactions }: {
               className="text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none" />
           </div>
           <div className="flex gap-2">
-            <button onClick={addExpense} className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-600">Save</button>
+            <button onClick={addExpense} className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Save</button>
             <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
           </div>
         </div>

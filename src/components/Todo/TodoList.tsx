@@ -105,7 +105,7 @@ export function TodoList() {
         <div className="w-px bg-gray-200 mx-1" />
         {['all', ...CATEGORIES].map(c => (
           <button key={c} onClick={() => setCatFilter(c)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${catFilter === c ? 'bg-gray-800 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${catFilter === c ? 'bg-gray-900 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
             {c}
           </button>
         ))}
