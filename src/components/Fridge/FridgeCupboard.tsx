@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, X, Search, ShoppingCart, AlertCircle } from 'lucide-react';
+import { Plus, Search, ShoppingCart, AlertCircle } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { FridgeItem, ShoppingItem } from '../../types';
@@ -40,6 +40,100 @@ const COMMON_ITEMS: { name: string; category: string; location: 'fridge' | 'cupb
   { name: 'Broccoli', category: 'Vegetables', location: 'fridge' },
 ];
 
+function ItemEditSheet({ item, onSave, onDelete, onClose, onAddToShoppingList }: {
+  item: FridgeItem;
+  onSave: (updated: FridgeItem) => void;
+  onDelete: () => void;
+  onClose: () => void;
+  onAddToShoppingList: () => void;
+}) {
+  const [form, setForm] = useState({
+    name: item.name,
+    quantity: item.quantity || '',
+    category: item.category,
+    location: item.location as 'fridge' | 'cupboard',
+    expiryDate: item.expiryDate || '',
+  });
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex flex-col justify-end"
+      onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="bg-white dark:bg-gray-900 rounded-t-3xl px-5 pt-4 pb-8 space-y-4">
+        <div className="w-10 h-1 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto" />
+
+        <div className="space-y-3">
+          <div>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Name</label>
+            <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Quantity</label>
+            <input value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))}
+              placeholder="e.g. 2, 500g, 1 pack"
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:placeholder-gray-500" />
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Location</label>
+            <div className="flex gap-2">
+              <button onClick={() => setForm(f => ({ ...f, location: 'fridge' }))}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${form.location === 'fridge' ? 'border-gray-900 dark:border-gray-100 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-500'}`}>
+                🧊 Fridge
+              </button>
+              <button onClick={() => setForm(f => ({ ...f, location: 'cupboard' }))}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${form.location === 'cupboard' ? 'border-gray-900 dark:border-gray-100 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-500'}`}>
+                🗄️ Cupboard
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Expiry / use-by date</label>
+            <input type="date" value={form.expiryDate} onChange={e => setForm(f => ({ ...f, expiryDate: e.target.value }))}
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+            {form.expiryDate && (
+              <button onClick={() => setForm(f => ({ ...f, expiryDate: '' }))}
+                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 mt-1">Clear date</button>
+            )}
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Category</label>
+            <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
+              className="w-full text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl px-3 py-2.5 focus:outline-none">
+              {FRIDGE_CATEGORIES.map(c => <option key={c}>{c}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex gap-2 pt-1">
+          <button onClick={() => onSave({ ...item, ...form })}
+            className="flex-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 py-3 rounded-xl font-semibold text-sm hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors">
+            Save changes
+          </button>
+          <button onClick={onClose}
+            className="px-5 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            Cancel
+          </button>
+        </div>
+
+        <div className="flex gap-2">
+          <button onClick={() => { onAddToShoppingList(); onClose(); }}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-orange-300 hover:text-orange-600 dark:hover:text-orange-400 dark:hover:border-orange-700 transition-colors">
+            <ShoppingCart size={14} /> Add to shopping list
+          </button>
+          <button onClick={onDelete}
+            className="flex-1 py-2.5 rounded-xl text-sm text-red-500 hover:text-red-700 dark:hover:text-red-400 border border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-700 transition-colors">
+            Remove item
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function FridgeCupboard() {
   const [items, setItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
   const [, setShoppingItems] = useLocalStorage<ShoppingItem[]>('shopping-items', []);
@@ -47,6 +141,7 @@ export function FridgeCupboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', category: 'Vegetables', quantity: '', expiryDate: '', location: 'fridge' as 'fridge' | 'cupboard' });
+  const [editingItem, setEditingItem] = useState<FridgeItem | null>(null);
 
   // Migrate old items without location field
   useEffect(() => {
@@ -68,6 +163,7 @@ export function FridgeCupboard() {
   };
 
   const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id));
+  const updateItem = (updated: FridgeItem) => setItems(prev => prev.map(i => i.id === updated.id ? updated : i));
 
   const addToShoppingList = (item: FridgeItem) => {
     const shoppingCat = FRIDGE_TO_SHOPPING_CATEGORY[item.category] || 'Other';
@@ -95,6 +191,15 @@ export function FridgeCupboard() {
 
   return (
     <div className="flex flex-col-reverse sm:flex-row gap-4">
+      {editingItem && (
+        <ItemEditSheet
+          item={editingItem}
+          onSave={updated => { updateItem(updated); setEditingItem(null); }}
+          onDelete={() => { removeItem(editingItem.id); setEditingItem(null); }}
+          onClose={() => setEditingItem(null)}
+          onAddToShoppingList={() => addToShoppingList(editingItem)}
+        />
+      )}
       {/* Main panel */}
       <div className="flex-1">
         {/* Location toggle */}
@@ -179,9 +284,10 @@ export function FridgeCupboard() {
                     {cat} <span className="text-gray-300 dark:text-gray-600 font-normal normal-case">({catItems.length})</span>
                   </div>
                   {catItems.map(item => (
-                    <div key={item.id} className="flex items-center gap-3 px-4 py-3 border-b border-gray-50 dark:border-gray-700 last:border-0 group hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors">
+                    <button key={item.id} onClick={() => setEditingItem(item)}
+                      className="w-full flex items-center gap-3 px-4 py-3 border-b border-gray-50 dark:border-gray-700 last:border-0 group hover:bg-gray-50/80 dark:hover:bg-gray-700/60 transition-colors text-left">
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{item.name}</span>
                           {item.quantity && <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-600 px-1.5 py-0.5 rounded-full">{item.quantity}</span>}
                           {isExpired(item.expiryDate) && <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded-full font-medium">Expired</span>}
@@ -189,19 +295,15 @@ export function FridgeCupboard() {
                         </div>
                         {item.expiryDate && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Use by {item.expiryDate}</p>}
                       </div>
-                      {/* Add to shopping list */}
                       <button
-                        onClick={() => addToShoppingList(item)}
+                        onClick={e => { e.stopPropagation(); addToShoppingList(item); }}
                         title="Add to shopping list"
-                        className="opacity-0 group-hover:opacity-100 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-orange-500 transition-all px-2 py-1 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                        className="opacity-0 group-hover:opacity-100 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-orange-500 transition-all px-2 py-1 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 flex-shrink-0"
                       >
                         <ShoppingCart size={13} /> Add to list
                       </button>
-                      <button onClick={() => removeItem(item.id)} title="Remove item"
-                        className="opacity-0 group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-red-500 transition-all flex-shrink-0">
-                        <X size={15} />
-                      </button>
-                    </div>
+                      <span className="text-gray-300 dark:text-gray-600 flex-shrink-0 text-xs">›</span>
+                    </button>
                   ))}
                 </div>
               );
