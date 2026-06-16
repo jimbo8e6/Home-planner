@@ -4,6 +4,9 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { trackRecipeSearch, triggerAchievementCheck } from '../../achievements/definitions';
 import type { FridgeItem, Recipe } from '../../types';
 
+type SortMode = 'count' | 'completeness';
+type ScoredRecipe = { recipe: Recipe; score: number; total: number };
+
 function itemToSearchTerms(itemName: string): string[] {
   const name = itemName.toLowerCase();
   const mapping: Record<string, string[]> = {
@@ -99,7 +102,8 @@ function RecipeDetail({ recipe, onBack, fridgeItems }: { recipe: Recipe; onBack:
 
 export function RecipesView() {
   const [allItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [scoredRecipes, setScoredRecipes] = useState<ScoredRecipe[]>([]);
+  const [sortMode, setSortMode] = useState<SortMode>('count');
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState('');
@@ -113,7 +117,7 @@ export function RecipesView() {
     setLoading(true);
     setSearched(true);
     setError('');
-    setRecipes([]);
+    setScoredRecipes([]);
     setSelected(null);
     trackRecipeSearch();
     triggerAchievementCheck();
@@ -145,11 +149,11 @@ export function RecipesView() {
         const matches = allItemNames.filter(fi =>
           ingredients.some(ing => ing.includes(fi.split(' ')[0]) || fi.includes(ing.split(' ')[0]))
         );
-        return { recipe: r, score: matches.length };
+        return { recipe: r, score: matches.length, total: ingredients.length };
       });
 
       scored.sort((a, b) => b.score - a.score);
-      setRecipes(scored.slice(0, 15).map(s => s.recipe));
+      setScoredRecipes(scored.slice(0, 30));
     } catch {
       setError('Could not fetch recipes. Please check your connection and try again.');
     } finally {
@@ -164,6 +168,15 @@ export function RecipesView() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const displayRecipes = [...scoredRecipes].sort((a, b) => {
+    if (sortMode === 'completeness') {
+      const aPct = a.total > 0 ? a.score / a.total : 0;
+      const bPct = b.total > 0 ? b.score / b.total : 0;
+      return bPct - aPct;
+    }
+    return b.score - a.score;
+  }).slice(0, 15);
 
   if (selected) {
     return <RecipeDetail recipe={selected} onBack={() => setSelected(null)} fridgeItems={allItems.map(i => i.name)} />;
@@ -219,29 +232,33 @@ export function RecipesView() {
         </div>
       )}
 
-      {searched && !loading && recipes.length === 0 && !error && (
+      {searched && !loading && scoredRecipes.length === 0 && !error && (
         <div className="text-center py-16">
           <p className="text-gray-400 dark:text-gray-500 mb-2">No recipes found for your current ingredients.</p>
           <p className="text-sm text-gray-400 dark:text-gray-500">Try adding more items to your fridge & cupboard.</p>
         </div>
       )}
 
-      {recipes.length > 0 && (
+      {scoredRecipes.length > 0 && (
         <>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-              {recipes.length} recipes you can make
+              {displayRecipes.length} recipes found
             </h3>
-            <p className="text-sm text-gray-400 dark:text-gray-500">Sorted by how many ingredients you already have</p>
+            <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+              <button onClick={() => setSortMode('count')}
+                className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${sortMode === 'count' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
+                Ingredients matched
+              </button>
+              <button onClick={() => setSortMode('completeness')}
+                className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${sortMode === 'completeness' ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
+                % Complete
+              </button>
+            </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {recipes.map(recipe => {
-              const ingredients = Array.from({ length: 20 }, (_, i) => recipe[`strIngredient${i + 1}`] || '').filter(Boolean);
-              const allItemNames = allItems.map(i => i.name.toLowerCase());
-              const matchCount = allItemNames.filter(fi =>
-                ingredients.some(ing => ing.toLowerCase().includes(fi.split(' ')[0]) || fi.includes(ing.toLowerCase().split(' ')[0]))
-              ).length;
-
+            {displayRecipes.map(({ recipe, score, total }) => {
+              const pct = total > 0 ? Math.round((score / total) * 100) : 0;
               return (
                 <button key={recipe.idMeal} onClick={() => setSelected(recipe)}
                   className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 transition-all text-left group">
@@ -250,8 +267,10 @@ export function RecipesView() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     <div className="absolute bottom-2 left-2 right-2 flex items-end justify-between">
                       <span className="text-xs bg-white/90 text-gray-700 px-2 py-0.5 rounded-full font-medium">{recipe.strCategory}</span>
-                      {matchCount > 0 && (
-                        <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full font-medium">{matchCount} ✓</span>
+                      {score > 0 && (
+                        <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full font-medium">
+                          {sortMode === 'completeness' ? `${pct}%` : `${score}/${total}`}
+                        </span>
                       )}
                     </div>
                   </div>
