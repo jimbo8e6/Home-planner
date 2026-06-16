@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Plus, Search, ShoppingCart, AlertCircle, ScanLine, Loader2 } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
-import { BarcodeScanner } from './BarcodeScanner';
+import { lazy, Suspense } from 'react';
+const BarcodeScanner = lazy(() => import('./BarcodeScanner').then(m => ({ default: m.BarcodeScanner })));
 import type { FridgeItem, ShoppingItem } from '../../types';
 
 function generateId() { return Math.random().toString(36).slice(2); }
@@ -249,7 +250,13 @@ export function FridgeCupboard() {
         />
       )}
       {showScanner && (
-        <BarcodeScanner onScan={handleBarcodeScan} onClose={() => setShowScanner(false)} />
+        <Suspense fallback={
+          <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+            <Loader2 size={40} className="text-white animate-spin" />
+          </div>
+        }>
+          <BarcodeScanner onScan={handleBarcodeScan} onClose={() => setShowScanner(false)} />
+        </Suspense>
       )}
       {barcodeLoading && (
         <div className="fixed inset-0 bg-black/60 z-50 flex flex-col items-center justify-center gap-4">
