@@ -44,13 +44,13 @@ function AlertCard({ alert, onNavigate }: { alert: AlertItem; onNavigate: (v: Vi
   return (
     <button
       onClick={() => onNavigate(alert.view)}
-      className="flex-shrink-0 w-52 bg-white rounded-2xl px-4 py-3.5 shadow-md border border-gray-100 text-left active:scale-95 transition-transform hover:shadow-lg"
+      className="flex-shrink-0 w-52 bg-white dark:bg-gray-800 rounded-2xl px-4 py-3.5 shadow-md border border-gray-100 dark:border-gray-700 text-left active:scale-95 transition-transform hover:shadow-lg"
     >
       <div className="flex items-start gap-3">
         <span className="text-2xl leading-none mt-0.5">{alert.emoji}</span>
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-gray-800 leading-tight">{alert.label}</p>
-          <p className="text-xs text-gray-400 mt-0.5 leading-snug">{alert.sub}</p>
+          <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 leading-tight">{alert.label}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-snug">{alert.sub}</p>
         </div>
       </div>
     </button>
@@ -179,11 +179,11 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* ── Hero header */}
       <div className="bg-gray-900 px-5 pt-12 pb-14">
         <div className="flex items-center justify-between">
-          <p className="text-gray-400 text-sm font-medium tracking-wide">
+          <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
           </p>
           <button
@@ -196,7 +196,7 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
         <h1 className="text-white text-3xl font-bold mt-1">
           Good {getTimeOfDay()} 👋
         </h1>
-        <p className="text-gray-400 text-sm mt-1">Here's what's on today.</p>
+        <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Here's what's on today.</p>
       </div>
 
       {/* ── Alert strip — overlaps hero with -mt */}
@@ -210,17 +210,17 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
 
       {/* ── Section bubbles */}
       <div className="px-4 pb-10">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Your home</p>
+        <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Your home</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {SECTIONS.map(s => (
             <button
               key={s.view}
               onClick={() => onNavigate(s.view)}
-              className="bg-gray-800 hover:bg-gray-700 rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-md shadow-gray-900/20 active:scale-95 transition-all duration-150 aspect-square"
+              className="bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-md shadow-gray-900/20 active:scale-95 transition-all duration-150 aspect-square"
             >
               <span className="text-4xl leading-none">{s.emoji}</span>
               <span className="text-white font-bold text-sm text-center leading-tight">{s.label}</span>
-              <span className="text-gray-400 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
+              <span className="text-gray-400 dark:text-gray-500 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
             </button>
           ))}
         </div>

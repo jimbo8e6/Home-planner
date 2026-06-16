@@ -122,8 +122,8 @@ export function ShoppingList() {
     <div className="w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Shopping List</h2>
-          <p className="text-sm text-gray-500 mt-1">{unchecked} items to get · {checked} ticked off</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Shopping List</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{unchecked} items to get · {checked} ticked off</p>
         </div>
         <div className="flex gap-2">
           {checked > 0 && (
@@ -144,17 +144,17 @@ export function ShoppingList() {
       </div>
 
       {showForm && (
-        <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 mb-4 shadow-sm">
           <div className="flex gap-2 mb-3">
             <input autoFocus placeholder="Item name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && addItem()}
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+              className="flex-1 text-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
             <input placeholder="Qty" value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))}
-              className="w-20 text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+              className="w-20 text-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
           </div>
           <div className="flex gap-2">
             <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none">
+              className="flex-1 text-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-xl px-3 py-2 focus:outline-none">
               {CATEGORIES.map(c => <option key={c}>{c}</option>)}
             </select>
             <button onClick={addItem} className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-700">Add</button>
@@ -169,7 +169,7 @@ export function ShoppingList() {
           const cat = { Milk: 'Dairy', Eggs: 'Dairy', Bread: 'Bakery', Butter: 'Dairy', Apples: 'Produce', Pasta: 'Pantry', Rice: 'Pantry', Chicken: 'Meat' }[name]!;
           return (
             <button key={name} onClick={() => setItems(prev => [...prev, { id: generateId(), name, quantity: '1', category: cat, checked: false, addedAt: new Date().toISOString() }])}
-              className="text-xs px-3 py-1.5 bg-white border border-gray-200 rounded-full text-gray-600 hover:bg-orange-50 hover:border-orange-200 hover:text-orange-700 transition-all">
+              className="text-xs px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-gray-600 dark:text-gray-300 hover:bg-orange-50 hover:border-orange-200 hover:text-orange-700 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:hover:text-white transition-all">
               + {name}
             </button>
           );
@@ -180,7 +180,7 @@ export function ShoppingList() {
       <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
         {['all', ...CATEGORIES.filter(c => items.some(i => i.category === c))].map(c => (
           <button key={c} onClick={() => setCatFilter(c)}
-            className={`text-xs px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all ${catFilter === c ? 'bg-gray-900 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'}`}>
+            className={`text-xs px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all ${catFilter === c ? 'bg-gray-900 text-white' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50'}`}>
             {c === 'all' ? 'All' : c}
           </button>
         ))}
@@ -189,23 +189,23 @@ export function ShoppingList() {
       {/* Items */}
       {items.length === 0 ? (
         <div className="text-center py-16">
-          <ShoppingCart size={48} className="mx-auto text-gray-200 mb-3" />
-          <p className="text-gray-400">Your list is empty. Add some items above!</p>
+          <ShoppingCart size={48} className="mx-auto text-gray-200 dark:text-gray-700 mb-3" />
+          <p className="text-gray-400 dark:text-gray-500">Your list is empty. Add some items above!</p>
         </div>
       ) : (
         <div className="space-y-4">
           {Object.entries(grouped).map(([cat, catItems]) => (
-            <div key={cat} className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-              <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+            <div key={cat} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
+              <div className="px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600 flex items-center justify-between">
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${CATEGORY_COLORS[cat] || 'bg-gray-100 text-gray-700'}`}>{cat}</span>
-                <span className="text-xs text-gray-400">{catItems.filter(i => !i.checked).length}/{catItems.length}</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">{catItems.filter(i => !i.checked).length}/{catItems.length}</span>
               </div>
               {catItems.map(item => (
-                <div key={item.id} className={`flex items-center gap-3 px-4 py-3 border-b border-gray-50 last:border-0 group ${item.checked ? 'opacity-50' : ''}`}>
+                <div key={item.id} className={`flex items-center gap-3 px-4 py-3 border-b border-gray-50 dark:border-gray-700 last:border-0 group ${item.checked ? 'opacity-50' : ''}`}>
                   <input type="checkbox" checked={item.checked} onChange={() => toggle(item.id)} className="w-4 h-4 accent-gray-900 cursor-pointer flex-shrink-0" />
-                  <span className={`flex-1 text-sm ${item.checked ? 'line-through text-gray-400' : 'text-gray-800'}`}>{item.name}</span>
-                  <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{item.quantity}</span>
-                  <button onClick={() => remove(item.id)} className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all">
+                  <span className={`flex-1 text-sm ${item.checked ? 'line-through text-gray-400 dark:text-gray-600' : 'text-gray-800 dark:text-gray-100'}`}>{item.name}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">{item.quantity}</span>
+                  <button onClick={() => remove(item.id)} className="opacity-0 group-hover:opacity-100 text-gray-300 dark:text-gray-600 hover:text-red-500 transition-all">
                     <X size={14} />
                   </button>
                 </div>
@@ -218,24 +218,24 @@ export function ShoppingList() {
       {/* Complete Shop Modal */}
       {showCompleteModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={e => e.target === e.currentTarget && closeModal()}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             {completed ? (
               <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle size={32} className="text-green-600" />
+                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle size={32} className="text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Shop complete! 🎉</h3>
-                <p className="text-gray-500 text-sm mb-1">Transaction added to Finance.</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Shop complete! 🎉</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">Transaction added to Finance.</p>
                 {goingToFridge.length + goingToCupboard.length > 0 && (
-                  <p className="text-gray-500 text-sm">{goingToFridge.length + goingToCupboard.length} items added to your Fridge & Cupboard.</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">{goingToFridge.length + goingToCupboard.length} items added to your Fridge & Cupboard.</p>
                 )}
                 <button onClick={closeModal} className="mt-6 bg-gray-900 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-gray-700 w-full">Done</button>
               </div>
             ) : (
               <>
-                <div className="p-5 border-b border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900">Complete Your Shop</h3>
-                  <p className="text-sm text-gray-500 mt-1">
+                <div className="p-5 border-b border-gray-100 dark:border-gray-700">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Complete Your Shop</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     {checked} items ticked off · enter the total cost to finish
                   </p>
                 </div>
@@ -243,9 +243,9 @@ export function ShoppingList() {
                 <div className="p-5 space-y-4">
                   {/* Cost input */}
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1.5 block">Total cost</label>
-                    <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-300">
-                      <span className="px-3 py-2.5 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm font-medium">£</span>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5 block">Total cost</label>
+                    <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-300">
+                      <span className="px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border-r border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium">£</span>
                       <input
                         autoFocus
                         type="number"
@@ -255,35 +255,35 @@ export function ShoppingList() {
                         value={shopCost}
                         onChange={e => setShopCost(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && parseFloat(shopCost) > 0 && completeShop()}
-                        className="flex-1 px-3 py-2.5 text-sm focus:outline-none text-gray-800"
+                        className="flex-1 px-3 py-2.5 text-sm focus:outline-none text-gray-800 dark:bg-gray-800 dark:text-white"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1.5 block">Description</label>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5 block">Description</label>
                     <input value={shopDescription} onChange={e => setShopDescription(e.target.value)}
-                      className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+                      className="w-full text-sm border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
                   </div>
 
                   {/* Preview */}
-                  <div className="bg-gray-50 rounded-xl p-3 space-y-2 text-sm max-h-48 overflow-y-auto">
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 space-y-2 text-sm max-h-48 overflow-y-auto">
                     {goingToFridge.length > 0 && (
                       <div>
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">→ Fridge ({goingToFridge.length})</p>
-                        {goingToFridge.map(i => <p key={i.id} className="text-gray-600 py-0.5">🧊 {i.name} <span className="text-gray-400">({i.quantity})</span></p>)}
+                        <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">→ Fridge ({goingToFridge.length})</p>
+                        {goingToFridge.map(i => <p key={i.id} className="text-gray-600 dark:text-gray-300 py-0.5">🧊 {i.name} <span className="text-gray-400 dark:text-gray-500">({i.quantity})</span></p>)}
                       </div>
                     )}
                     {goingToCupboard.length > 0 && (
                       <div>
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1 mt-2">→ Cupboard ({goingToCupboard.length})</p>
-                        {goingToCupboard.map(i => <p key={i.id} className="text-gray-600 py-0.5">🗄️ {i.name} <span className="text-gray-400">({i.quantity})</span></p>)}
+                        <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1 mt-2">→ Cupboard ({goingToCupboard.length})</p>
+                        {goingToCupboard.map(i => <p key={i.id} className="text-gray-600 dark:text-gray-300 py-0.5">🗄️ {i.name} <span className="text-gray-400 dark:text-gray-500">({i.quantity})</span></p>)}
                       </div>
                     )}
                     {beingSkipped.length > 0 && (
                       <div>
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1 mt-2">Not added to fridge ({beingSkipped.length})</p>
-                        {beingSkipped.map(i => <p key={i.id} className="text-gray-400 py-0.5 line-through">{i.name}</p>)}
+                        <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1 mt-2">Not added to fridge ({beingSkipped.length})</p>
+                        {beingSkipped.map(i => <p key={i.id} className="text-gray-400 dark:text-gray-600 py-0.5 line-through">{i.name}</p>)}
                       </div>
                     )}
                   </div>
@@ -293,11 +293,11 @@ export function ShoppingList() {
                   <button
                     onClick={completeShop}
                     disabled={!shopCost || parseFloat(shopCost) <= 0}
-                    className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${!shopCost || parseFloat(shopCost) <= 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-gray-700'}`}
+                    className={`flex-1 py-2.5 rounded-xl font-medium text-sm transition-all ${!shopCost || parseFloat(shopCost) <= 0 ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-gray-700'}`}
                   >
                     Complete & Save (£{parseFloat(shopCost || '0').toFixed(2)})
                   </button>
-                  <button onClick={closeModal} className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm hover:bg-gray-200">
+                  <button onClick={closeModal} className="px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-gray-600">
                     Cancel
                   </button>
                 </div>

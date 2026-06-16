@@ -52,25 +52,25 @@ export function CalendarView() {
       <div className="flex-1">
         {/* Month navigation */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
             {format(currentDate, 'MMMM yyyy')}
           </h2>
           <div className="flex gap-2">
             <button
               onClick={() => setCurrentDate(d => new Date(d.getFullYear(), d.getMonth() - 1))}
-              className="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={() => setCurrentDate(new Date())}
-              className="px-3 py-1 text-sm rounded-lg bg-gray-100 text-gray-700 font-medium"
+              className="px-3 py-1 text-sm rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium"
             >
               Today
             </button>
             <button
               onClick={() => setCurrentDate(d => new Date(d.getFullYear(), d.getMonth() + 1))}
-              className="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
             >
               <ChevronRight size={18} />
             </button>
@@ -80,7 +80,7 @@ export function CalendarView() {
         {/* Day headers */}
         <div className="grid grid-cols-7 mb-1">
           {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-            <div key={d} className="text-center text-xs font-medium text-gray-500 py-2">{d}</div>
+            <div key={d} className="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-2">{d}</div>
           ))}
         </div>
 
@@ -99,14 +99,14 @@ export function CalendarView() {
                 onClick={() => setSelectedDate(isSelected ? null : dateStr)}
                 className={`min-h-[80px] p-1.5 rounded-xl text-left transition-all border ${
                   isSelected
-                    ? 'border-gray-900 bg-gray-50'
+                    ? 'border-gray-900 dark:border-white bg-gray-50 dark:bg-gray-800'
                     : isToday
-                    ? 'border-gray-300 bg-gray-50'
-                    : 'border-transparent hover:border-gray-200 hover:bg-gray-50'
+                    ? 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800'
+                    : 'border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
                 } ${!isCurrentMonth ? 'opacity-40' : ''}`}
               >
                 <span className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full ${
-                  isToday ? 'bg-gray-900 text-white' : 'text-gray-700'
+                  isToday ? 'bg-gray-900 text-white' : 'text-gray-700 dark:text-gray-300'
                 }`}>
                   {format(day, 'd')}
                 </span>
@@ -121,7 +121,7 @@ export function CalendarView() {
                     </div>
                   ))}
                   {dayEvents.length > 2 && (
-                    <div className="text-xs text-gray-400 px-1">+{dayEvents.length - 2} more</div>
+                    <div className="text-xs text-gray-400 dark:text-gray-500 px-1">+{dayEvents.length - 2} more</div>
                   )}
                 </div>
               </button>
@@ -133,9 +133,9 @@ export function CalendarView() {
       {/* Side panel */}
       <div className="w-full sm:w-72 flex flex-col gap-4 flex-shrink-0">
         {selectedDate && (
-          <div className="bg-white rounded-2xl border border-gray-200 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-800">
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100">
                 {format(parseISO(selectedDate), 'EEE, MMM d')}
               </h3>
               <button
@@ -147,25 +147,25 @@ export function CalendarView() {
             </div>
 
             {showForm && (
-              <div className="mb-4 p-3 bg-gray-50 rounded-xl space-y-2">
+              <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl space-y-2">
                 <input
                   autoFocus
                   placeholder="Event title"
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="w-full text-sm border border-gray-200 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:placeholder-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <input
                   type="time"
                   value={form.time}
                   onChange={e => setForm(f => ({ ...f, time: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="w-full text-sm border border-gray-200 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:placeholder-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <input
                   placeholder="Notes (optional)"
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="w-full text-sm border border-gray-200 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:placeholder-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <div className="flex gap-1.5">
                   {EVENT_COLORS.map(c => (
@@ -189,23 +189,23 @@ export function CalendarView() {
             )}
 
             {selectedEvents.length === 0 && !showForm && (
-              <p className="text-sm text-gray-400 text-center py-4">No events. Click Add!</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">No events. Click Add!</p>
             )}
 
             <div className="space-y-2">
               {selectedEvents.map(ev => (
-                <div key={ev.id} className="flex items-start gap-2 p-2.5 rounded-xl bg-gray-50 group">
+                <div key={ev.id} className="flex items-start gap-2 p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700 group">
                   <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: ev.color }} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{ev.title}</p>
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{ev.title}</p>
                     {ev.time && (
-                      <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5">
                         <Clock size={11} />{ev.time}
                       </p>
                     )}
-                    {ev.description && <p className="text-xs text-gray-400 mt-0.5 truncate">{ev.description}</p>}
+                    {ev.description && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">{ev.description}</p>}
                   </div>
-                  <button onClick={() => removeEvent(ev.id)} className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-opacity">
+                  <button onClick={() => removeEvent(ev.id)} className="opacity-0 group-hover:opacity-100 text-gray-400 dark:text-gray-500 hover:text-red-500 transition-opacity">
                     <X size={14} />
                   </button>
                 </div>
@@ -215,23 +215,23 @@ export function CalendarView() {
         )}
 
         {/* Upcoming events */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-4">
-          <h3 className="font-semibold text-gray-800 mb-3">Upcoming</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4">
+          <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-3">Upcoming</h3>
           {events
             .filter(e => parseISO(e.date) >= new Date(new Date().setHours(0,0,0,0)))
             .sort((a, b) => a.date.localeCompare(b.date))
             .slice(0, 5)
             .map(ev => (
-              <div key={ev.id} className="flex items-center gap-2 py-2 border-b border-gray-50 last:border-0">
+              <div key={ev.id} className="flex items-center gap-2 py-2 border-b border-gray-50 dark:border-gray-700 last:border-0">
                 <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: ev.color }} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-700 truncate">{ev.title}</p>
-                  <p className="text-xs text-gray-400">{format(parseISO(ev.date), 'MMM d')}{ev.time ? ` · ${ev.time}` : ''}</p>
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{ev.title}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">{format(parseISO(ev.date), 'MMM d')}{ev.time ? ` · ${ev.time}` : ''}</p>
                 </div>
               </div>
             ))}
           {events.filter(e => parseISO(e.date) >= new Date()).length === 0 && (
-            <p className="text-sm text-gray-400">No upcoming events</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">No upcoming events</p>
           )}
         </div>
       </div>

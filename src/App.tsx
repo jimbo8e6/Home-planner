@@ -54,9 +54,9 @@ export default function App() {
   const isHome = view === 'dashboard';
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950">
       {/* App shell — phone-width centered, card-style on tablet+ */}
-      <div className="max-w-xl mx-auto min-h-screen bg-gray-50 shadow-2xl relative flex flex-col">
+      <div className="max-w-xl mx-auto min-h-screen bg-gray-50 dark:bg-gray-950 shadow-2xl relative flex flex-col">
         {isHome ? (
           <Dashboard
             onNavigate={navigate}
