@@ -1,10 +1,38 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, ShoppingCart, AlertCircle } from 'lucide-react';
+import { Plus, Search, ShoppingCart, AlertCircle, ScanLine, Loader2 } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
+import { BarcodeScanner } from './BarcodeScanner';
 import type { FridgeItem, ShoppingItem } from '../../types';
 
 function generateId() { return Math.random().toString(36).slice(2); }
+
+function mapOFFCategory(tags: string[]): string {
+  const t = tags.join(' ');
+  if (/meat|beef|chicken|poultry|pork|lamb|sausage/.test(t)) return 'Meat & Fish';
+  if (/fish|seafood|salmon|tuna|prawn/.test(t)) return 'Meat & Fish';
+  if (/egg/.test(t)) return 'Eggs';
+  if (/dairy|milk|cream|cheese|yogurt|butter/.test(t)) return 'Dairy';
+  if (/vegetable|salad|carrot|broccoli|spinach|onion|pepper|tomato/.test(t)) return 'Vegetables';
+  if (/fruit|apple|banana|berry|lemon|orange/.test(t)) return 'Fruit';
+  if (/pasta|rice|cereal|bread|flour|grain|noodle/.test(t)) return 'Grains & Pasta';
+  if (/sauce|condiment|oil|vinegar|spice|seasoning/.test(t)) return 'Condiments';
+  return 'Other';
+}
+
+async function lookupBarcode(barcode: string): Promise<{ name: string; quantity: string; category: string } | null> {
+  const res = await fetch(
+    `https://world.openfoodfacts.org/api/v2/product/${barcode}.json?fields=product_name,quantity,categories_tags`
+  );
+  const data = await res.json();
+  if (data.status !== 1) return null;
+  const p = data.product;
+  return {
+    name: p.product_name || '',
+    quantity: p.quantity || '',
+    category: mapOFFCategory(p.categories_tags || []),
+  };
+}
 
 const FRIDGE_CATEGORIES = ['Vegetables', 'Fruit', 'Meat & Fish', 'Dairy', 'Eggs', 'Grains & Pasta', 'Condiments', 'Leftovers', 'Other'];
 
@@ -142,6 +170,8 @@ export function FridgeCupboard() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', category: 'Vegetables', quantity: '', expiryDate: '', location: 'fridge' as 'fridge' | 'cupboard' });
   const [editingItem, setEditingItem] = useState<FridgeItem | null>(null);
+  const [showScanner, setShowScanner] = useState(false);
+  const [barcodeLoading, setBarcodeLoading] = useState(false);
 
   // Migrate old items without location field
   useEffect(() => {
@@ -164,6 +194,24 @@ export function FridgeCupboard() {
 
   const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id));
   const updateItem = (updated: FridgeItem) => setItems(prev => prev.map(i => i.id === updated.id ? updated : i));
+
+  const handleBarcodeScan = async (barcode: string) => {
+    setShowScanner(false);
+    setBarcodeLoading(true);
+    try {
+      const product = await lookupBarcode(barcode);
+      if (product && product.name) {
+        setForm(f => ({ ...f, name: product.name, quantity: product.quantity, category: product.category }));
+      } else {
+        setForm(f => ({ ...f, name: '', quantity: '' }));
+      }
+    } catch {
+      setForm(f => ({ ...f, name: '', quantity: '' }));
+    } finally {
+      setBarcodeLoading(false);
+      setShowForm(true);
+    }
+  };
 
   const addToShoppingList = (item: FridgeItem) => {
     const shoppingCat = FRIDGE_TO_SHOPPING_CATEGORY[item.category] || 'Other';
@@ -200,6 +248,15 @@ export function FridgeCupboard() {
           onAddToShoppingList={() => addToShoppingList(editingItem)}
         />
       )}
+      {showScanner && (
+        <BarcodeScanner onScan={handleBarcodeScan} onClose={() => setShowScanner(false)} />
+      )}
+      {barcodeLoading && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex flex-col items-center justify-center gap-4">
+          <Loader2 size={40} className="text-white animate-spin" />
+          <p className="text-white font-medium">Looking up product…</p>
+        </div>
+      )}
       {/* Main panel */}
       <div className="flex-1">
         {/* Location toggle */}
@@ -229,6 +286,11 @@ export function FridgeCupboard() {
             <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder={`Search ${locationFilter}...`}
               className="flex-1 py-2.5 text-sm focus:outline-none bg-transparent dark:text-white dark:placeholder-gray-500" />
           </div>
+          <button onClick={() => setShowScanner(true)}
+            title="Scan barcode"
+            className="flex items-center justify-center w-11 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex-shrink-0">
+            <ScanLine size={18} />
+          </button>
           <button onClick={() => setShowForm(!showForm)}
             className="flex items-center gap-1.5 bg-gray-900 text-white pl-3 pr-4 py-2.5 rounded-xl hover:bg-gray-700 font-semibold text-sm whitespace-nowrap">
             <Plus size={15} /> Add Item

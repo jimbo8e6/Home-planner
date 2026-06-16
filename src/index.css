@@ -25,3 +25,12 @@ body {
 .animate-achievement-toast {
   animation: achievement-slide-up 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+@keyframes scan-line {
+  0%, 100% { transform: translateY(-60px); opacity: 0.6; }
+  50%       { transform: translateY(60px);  opacity: 1; }
+}
+
+.animate-scan-line {
+  animation: scan-line 1.8s ease-in-out infinite;
+}
