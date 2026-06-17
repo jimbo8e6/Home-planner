@@ -121,29 +121,36 @@ export function SettingsModal({ onClose }: Props) {
               <span className="text-sm">❓</span>
               <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Help & Guide</h3>
             </div>
-            <div className="space-y-2">
-              {HELP_SECTIONS.map(section => (
-                <div key={section.title} className="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden">
-                  <button
-                    onClick={() => setExpanded(expanded === section.title ? null : section.title)}
-                    className="w-full flex items-center justify-between px-4 py-3.5 text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg leading-none">{section.emoji}</span>
-                      <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{section.title}</span>
-                    </div>
-                    {expanded === section.title
-                      ? <ChevronUp size={16} className="text-gray-400 flex-shrink-0" />
-                      : <ChevronDown size={16} className="text-gray-400 flex-shrink-0" />
-                    }
-                  </button>
-                  {expanded === section.title && (
-                    <div className="px-4 pb-4">
-                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{section.content}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
+            <div className="space-y-3">
+              {HELP_SECTIONS.map(section => {
+                const isOpen = expanded === section.title;
+                return (
+                  <div key={section.title} className="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden">
+                    <button
+                      onClick={() => setExpanded(isOpen ? null : section.title)}
+                      className="w-full flex items-center justify-between px-5 py-5 text-left"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-3xl leading-none">{section.emoji}</span>
+                        <span className="text-base font-bold text-gray-800 dark:text-gray-100">{section.title}</span>
+                      </div>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                        isOpen ? 'bg-gray-800 dark:bg-white' : 'bg-gray-200 dark:bg-gray-700'
+                      }`}>
+                        {isOpen
+                          ? <ChevronUp size={16} className="text-white dark:text-gray-900" />
+                          : <ChevronDown size={16} className="text-gray-500 dark:text-gray-400" />
+                        }
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 pb-5 pt-1 border-t border-gray-200 dark:border-gray-700">
+                        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{section.content}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
