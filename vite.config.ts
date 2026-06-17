@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'HomeBase',
-        short_name: 'HomeBase',
+        name: 'HomePlanner',
+        short_name: 'HomePlanner',
         description: 'Your home, organised — fridge, shopping, finances and more.',
         theme_color: '#111827',
         background_color: '#111827',

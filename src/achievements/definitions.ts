@@ -60,9 +60,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'cal-25',    name: 'Life of the Party',   emoji: '🎉', rarity: 'epic',      category: 'calendar', description: '25 events! You never stop.',                                       check: s => s.calendarEvents >= 25 },
 
   // ── General
-  { id: 'all-sections', name: 'Home Manager',     emoji: '🏡', rarity: 'epic',      category: 'general',  description: 'Explored all 6 sections. You\'re using HomeBase like a pro!',    check: s => s.visitedSections.length >= 6 },
+  { id: 'all-sections', name: 'Home Manager',     emoji: '🏡', rarity: 'epic',      category: 'general',  description: 'Explored all 6 sections. You\'re using HomePlanner like a pro!',    check: s => s.visitedSections.length >= 6 },
   { id: 'ach-10',    name: 'Achievement Hunter',  emoji: '🌈', rarity: 'epic',      category: 'general',  description: 'Unlocked 10 achievements. Clearly you\'re a completionist!',      check: s => s.unlockedCount >= 10 },
-  { id: 'power-user', name: 'Power User',         emoji: '⭐', rarity: 'legendary', category: 'general',  description: 'Something in every section. True HomeBase mastery!',               check: s => s.completedTodos >= 1 && s.fridgeItemCount >= 1 && s.completedShops >= 1 && s.incomeEntries >= 1 && s.calendarEvents >= 1 },
+  { id: 'power-user', name: 'Power User',         emoji: '⭐', rarity: 'legendary', category: 'general',  description: 'Something in every section. True HomePlanner mastery!',               check: s => s.completedTodos >= 1 && s.fridgeItemCount >= 1 && s.completedShops >= 1 && s.incomeEntries >= 1 && s.calendarEvents >= 1 },
 ];
 
 export const RARITY_CONFIG: Record<AchievementRarity, { label: string; border: string; bg: string; badge: string; glow: string }> = {

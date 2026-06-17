@@ -22,7 +22,7 @@ export function Sidebar({ currentView, onNavigate, onOpenAchievements }: Props) 
     <div className="flex flex-col h-full bg-gray-900 dark:bg-black">
       {/* Logo */}
       <div className="px-5 pt-8 pb-6 border-b border-white/10">
-        <p className="text-white font-bold text-lg tracking-tight">HomeBase</p>
+        <p className="text-white font-bold text-lg tracking-tight">HomePlanner</p>
         <p className="text-white/40 text-xs mt-0.5">Your home, organised</p>
       </div>
 
