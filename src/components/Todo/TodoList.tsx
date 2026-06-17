@@ -95,20 +95,23 @@ export function TodoList() {
       )}
 
       {/* Filters */}
-      <div className="flex gap-2 mb-4 flex-wrap">
-        {(['all', 'active', 'done'] as const).map(f => (
-          <button key={f} onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${filter === f ? 'bg-gray-900 text-white' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50'}`}>
-            {f} ({counts[f]})
-          </button>
-        ))}
-        <div className="w-px bg-gray-200 dark:bg-gray-700 mx-1" />
-        {['all', ...CATEGORIES].map(c => (
-          <button key={c} onClick={() => setCatFilter(c)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${catFilter === c ? 'bg-gray-900 text-white' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50'}`}>
-            {c}
-          </button>
-        ))}
+      <div className="mb-4">
+        <div className="flex bg-gray-100 dark:bg-gray-800 p-1.5 rounded-2xl gap-1.5 mb-3">
+          {(['all', 'active', 'done'] as const).map(f => (
+            <button key={f} onClick={() => setFilter(f)}
+              className={`flex-1 py-3.5 rounded-xl text-sm font-bold capitalize transition-all ${filter === f ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
+              {f} <span className="font-normal opacity-70">({counts[f]})</span>
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {['all', ...CATEGORIES].map(c => (
+            <button key={c} onClick={() => setCatFilter(c)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${catFilter === c ? 'bg-gray-900 text-white' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50'}`}>
+              {c}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Task list */}

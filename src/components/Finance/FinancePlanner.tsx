@@ -71,10 +71,10 @@ export function FinancePlanner() {
 
   return (
     <div>
-      <div className="flex gap-1 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl w-fit flex-wrap">
+      <div className="flex gap-1.5 mb-6 bg-gray-100 dark:bg-gray-800 p-1.5 rounded-2xl">
         {tabs.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
+            className={`flex-1 py-3.5 rounded-xl text-sm font-bold transition-all ${activeTab === tab.id ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
             {tab.label}
           </button>
         ))}

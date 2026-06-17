@@ -144,21 +144,21 @@ export function ShoppingList() {
       </div>
 
       {showForm && (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 mb-4 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 mb-4 shadow-sm">
           <div className="flex gap-2 mb-3">
             <input autoFocus placeholder="Item name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && addItem()}
-              className="flex-1 text-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+              className="flex-1 text-base border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
             <input placeholder="Qty" value={form.quantity} onChange={e => setForm(f => ({ ...f, quantity: e.target.value }))}
-              className="w-20 text-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
+              className="w-20 text-base border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 rounded-xl px-3 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-300" />
           </div>
           <div className="flex gap-2">
             <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-              className="flex-1 text-sm border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-xl px-3 py-2 focus:outline-none">
+              className="flex-1 text-base border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-xl px-4 py-3.5 focus:outline-none">
               {CATEGORIES.map(c => <option key={c}>{c}</option>)}
             </select>
-            <button onClick={addItem} className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-700">Add</button>
-            <button onClick={() => setShowForm(false)} className="bg-gray-100 text-gray-600 px-3 py-2 rounded-xl text-sm hover:bg-gray-200">✕</button>
+            <button onClick={addItem} className="bg-gray-900 text-white px-5 py-3.5 rounded-xl text-base font-bold hover:bg-gray-700">Add</button>
+            <button onClick={() => setShowForm(false)} className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-4 py-3.5 rounded-xl text-base hover:bg-gray-200 dark:hover:bg-gray-600">✕</button>
           </div>
         </div>
       )}
