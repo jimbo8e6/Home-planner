@@ -1,11 +1,13 @@
 import { format, differenceInDays } from 'date-fns';
-import { LogOut } from 'lucide-react';
+import { LogOut, Settings } from 'lucide-react';
 import { useCloudStorage } from '../hooks/useCloudStorage';
+import { useAuth } from '../contexts/AuthContext';
 import type { CalendarEvent, TodoItem, ShoppingItem, Subscription, FridgeItem, RegularBill, Transaction, View } from '../types';
 
 interface DashboardProps {
   onNavigate: (view: View) => void;
   onOpenAchievements: () => void;
+  onOpenSettings: () => void;
   onSignOut: () => void;
 }
 
@@ -61,7 +63,9 @@ function AlertCard({ alert, onNavigate }: { alert: AlertItem; onNavigate: (v: Vi
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: DashboardProps) {
+export function Dashboard({ onNavigate, onOpenAchievements, onOpenSettings, onSignOut }: DashboardProps) {
+  const { user } = useAuth();
+  const displayName = user?.user_metadata?.name as string | undefined;
   const [events]       = useCloudStorage<CalendarEvent[]>('calendar-events', []);
   const [todos]        = useCloudStorage<TodoItem[]>('todos', []);
   const [shopping]     = useCloudStorage<ShoppingItem[]>('shopping-items', []);
@@ -188,12 +192,19 @@ export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: Dashboa
           <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={onOpenAchievements}
               className="flex items-center gap-1.5 text-white/80 hover:text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition-all font-medium"
             >
               🏆 Achievements
+            </button>
+            <button
+              onClick={onOpenSettings}
+              className="flex items-center justify-center w-8 h-8 text-white/40 hover:text-white/70 hover:bg-white/10 rounded-xl transition-all"
+              title="Settings"
+            >
+              <Settings size={15} />
             </button>
             <button
               onClick={onSignOut}
@@ -205,7 +216,7 @@ export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: Dashboa
           </div>
         </div>
         <h1 className="text-white text-3xl font-bold mt-1">
-          Good {getTimeOfDay()} 👋
+          Good {getTimeOfDay()}{displayName ? `, ${displayName}` : ''} 👋
         </h1>
         <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Here's what's on today.</p>
       </div>

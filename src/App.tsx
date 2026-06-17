@@ -11,6 +11,7 @@ import { RecipesView } from './components/Fridge/RecipesView';
 import { AchievementToast } from './components/Achievements/AchievementToast';
 import { AchievementsModal } from './components/Achievements/AchievementsModal';
 import { AuthScreen } from './components/Auth/AuthScreen';
+import { SettingsModal } from './components/Settings/SettingsModal';
 import { triggerAchievementCheck, trackSectionVisit } from './achievements/definitions';
 import { useAuth } from './contexts/AuthContext';
 import { useUserData } from './contexts/UserDataContext';
@@ -44,6 +45,7 @@ export default function App() {
   const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
   const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
   const [showAchievementsModal, setShowAchievementsModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -78,6 +80,7 @@ export default function App() {
         ? <Dashboard
             onNavigate={navigate}
             onOpenAchievements={() => setShowAchievementsModal(true)}
+            onOpenSettings={() => setShowSettingsModal(true)}
             onSignOut={signOut}
           />
         : <div className="flex-1 overflow-y-auto p-4" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
@@ -95,6 +98,9 @@ export default function App() {
       )}
       {showAchievementsModal && (
         <AchievementsModal onClose={() => setShowAchievementsModal(false)} />
+      )}
+      {showSettingsModal && (
+        <SettingsModal onClose={() => setShowSettingsModal(false)} />
       )}
     </>
   );
@@ -117,6 +123,7 @@ export default function App() {
             currentView={view}
             onNavigate={navigate}
             onOpenAchievements={() => setShowAchievementsModal(true)}
+            onOpenSettings={() => setShowSettingsModal(true)}
             onSignOut={signOut}
           />
         </div>
