@@ -183,7 +183,7 @@ export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: Dashboa
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* ── Hero header */}
-      <div className="bg-gray-900 px-5 pt-12 pb-14">
+      <div className="bg-gray-900 px-5 pb-14" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 3rem)' }}>
         <div className="flex items-center justify-between">
           <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
@@ -220,7 +220,7 @@ export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: Dashboa
       </div>
 
       {/* ── Section bubbles */}
-      <div className="px-4 pb-10">
+      <div className="px-4" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 2.5rem)' }}>
         <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Your home</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {SECTIONS.map(s => (

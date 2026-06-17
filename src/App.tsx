@@ -80,7 +80,7 @@ export default function App() {
             onOpenAchievements={() => setShowAchievementsModal(true)}
             onSignOut={signOut}
           />
-        : <div className="flex-1 overflow-y-auto p-4">
+        : <div className="flex-1 overflow-y-auto p-4" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
             {view === 'calendar'  && <CalendarView />}
             {view === 'todo'      && <TodoList />}
             {view === 'shopping'  && <ShoppingList />}
