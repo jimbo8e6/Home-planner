@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, X, Clock } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, isSameMonth, isSameDay, parseISO } from 'date-fns';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCloudStorage } from '../../hooks/useCloudStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { CalendarEvent } from '../../types';
 
@@ -12,7 +12,7 @@ function generateId() {
 }
 
 export function CalendarView() {
-  const [events, setEvents] = useLocalStorage<CalendarEvent[]>('calendar-events', []);
+  const [events, setEvents] = useCloudStorage<CalendarEvent[]>('calendar-events', []);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);

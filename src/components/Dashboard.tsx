@@ -1,10 +1,12 @@
 import { format, differenceInDays } from 'date-fns';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { LogOut } from 'lucide-react';
+import { useCloudStorage } from '../hooks/useCloudStorage';
 import type { CalendarEvent, TodoItem, ShoppingItem, Subscription, FridgeItem, RegularBill, Transaction, View } from '../types';
 
 interface DashboardProps {
   onNavigate: (view: View) => void;
   onOpenAchievements: () => void;
+  onSignOut: () => void;
 }
 
 function getTimeOfDay() {
@@ -59,14 +61,14 @@ function AlertCard({ alert, onNavigate }: { alert: AlertItem; onNavigate: (v: Vi
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
-  const [events]       = useLocalStorage<CalendarEvent[]>('calendar-events', []);
-  const [todos]        = useLocalStorage<TodoItem[]>('todos', []);
-  const [shopping]     = useLocalStorage<ShoppingItem[]>('shopping-items', []);
-  const [subs]         = useLocalStorage<Subscription[]>('subscriptions', []);
-  const [bills]        = useLocalStorage<RegularBill[]>('regular-bills', []);
-  const [transactions] = useLocalStorage<Transaction[]>('transactions', []);
-  const [fridge]       = useLocalStorage<FridgeItem[]>('fridge-items', []);
+export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: DashboardProps) {
+  const [events]       = useCloudStorage<CalendarEvent[]>('calendar-events', []);
+  const [todos]        = useCloudStorage<TodoItem[]>('todos', []);
+  const [shopping]     = useCloudStorage<ShoppingItem[]>('shopping-items', []);
+  const [subs]         = useCloudStorage<Subscription[]>('subscriptions', []);
+  const [bills]        = useCloudStorage<RegularBill[]>('regular-bills', []);
+  const [transactions] = useCloudStorage<Transaction[]>('transactions', []);
+  const [fridge]       = useCloudStorage<FridgeItem[]>('fridge-items', []);
 
   const today = new Date();
   const todayStr = format(today, 'yyyy-MM-dd');
@@ -186,12 +188,21 @@ export function Dashboard({ onNavigate, onOpenAchievements }: DashboardProps) {
           <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
           </p>
-          <button
-            onClick={onOpenAchievements}
-            className="flex items-center gap-1.5 text-white/80 hover:text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition-all font-medium"
-          >
-            🏆 Achievements
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onOpenAchievements}
+              className="flex items-center gap-1.5 text-white/80 hover:text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition-all font-medium"
+            >
+              🏆 Achievements
+            </button>
+            <button
+              onClick={onSignOut}
+              className="flex items-center justify-center w-8 h-8 text-white/40 hover:text-white/70 hover:bg-white/10 rounded-xl transition-all"
+              title="Sign out"
+            >
+              <LogOut size={15} />
+            </button>
+          </div>
         </div>
         <h1 className="text-white text-3xl font-bold mt-1">
           Good {getTimeOfDay()} 👋

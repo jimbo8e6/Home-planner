@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, X, TrendingUp, TrendingDown, ToggleLeft, ToggleRight, Wallet, Receipt, CreditCard, Building2 } from 'lucide-react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCloudStorage } from '../../hooks/useCloudStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { Subscription, Transaction, RegularBill } from '../../types';
 import { format, parseISO } from 'date-fns';
@@ -43,9 +43,9 @@ type Tab = 'overview' | 'income' | 'bills' | 'subscriptions' | 'transactions';
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function FinancePlanner() {
-  const [subs, setSubs] = useLocalStorage<Subscription[]>('subscriptions', []);
-  const [bills, setBills] = useLocalStorage<RegularBill[]>('regular-bills', []);
-  const [transactions, setTransactions] = useLocalStorage<Transaction[]>('transactions', []);
+  const [subs, setSubs] = useCloudStorage<Subscription[]>('subscriptions', []);
+  const [bills, setBills] = useCloudStorage<RegularBill[]>('regular-bills', []);
+  const [transactions, setTransactions] = useCloudStorage<Transaction[]>('transactions', []);
   const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   const thisMonth = new Date().toISOString().slice(0, 7);

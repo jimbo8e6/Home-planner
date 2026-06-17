@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, X, Flag, Calendar, Tag } from 'lucide-react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCloudStorage } from '../../hooks/useCloudStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { TodoItem } from '../../types';
 
@@ -10,7 +10,7 @@ const PRIORITIES = { high: { label: 'High', color: 'text-red-500', bg: 'bg-red-5
 const CATEGORIES = ['Personal', 'Work', 'Home', 'Health', 'Family', 'Other'];
 
 export function TodoList() {
-  const [todos, setTodos] = useLocalStorage<TodoItem[]>('todos', []);
+  const [todos, setTodos] = useCloudStorage<TodoItem[]>('todos', []);
   const [filter, setFilter] = useState<'all' | 'active' | 'done'>('all');
   const [catFilter, setCatFilter] = useState<string>('all');
   const [showForm, setShowForm] = useState(false);

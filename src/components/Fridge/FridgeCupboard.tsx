@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Search, ShoppingCart, AlertCircle, ScanLine, Loader2 } from 'lucide-react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCloudStorage } from '../../hooks/useCloudStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
 import { lazy, Suspense } from 'react';
 const BarcodeScanner = lazy(() => import('./BarcodeScanner').then(m => ({ default: m.BarcodeScanner })));
@@ -137,8 +137,8 @@ function ItemEditSheet({ item, onSave, onDelete, onClose, onAddToShoppingList }:
 }
 
 export function FridgeCupboard() {
-  const [items, setItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
-  const [, setShoppingItems] = useLocalStorage<ShoppingItem[]>('shopping-items', []);
+  const [items, setItems] = useCloudStorage<FridgeItem[]>('fridge-items', []);
+  const [, setShoppingItems] = useCloudStorage<ShoppingItem[]>('shopping-items', []);
   const [locationFilter, setLocationFilter] = useState<'fridge' | 'cupboard' | 'freezer'>('fridge');
   const [searchQuery, setSearchQuery] = useState('');
   const [showForm, setShowForm] = useState(false);

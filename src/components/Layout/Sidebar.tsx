@@ -1,4 +1,4 @@
-import { Home, CheckSquare, ShoppingCart, Package, Wallet, Calendar, ChefHat, Trophy } from 'lucide-react';
+import { Home, CheckSquare, ShoppingCart, Package, Wallet, Calendar, ChefHat, Trophy, LogOut } from 'lucide-react';
 import type { View } from '../../types';
 
 const NAV_ITEMS: { view: View; label: string; icon: React.ReactNode }[] = [
@@ -15,9 +15,10 @@ interface Props {
   currentView: View;
   onNavigate: (v: View) => void;
   onOpenAchievements: () => void;
+  onSignOut: () => void;
 }
 
-export function Sidebar({ currentView, onNavigate, onOpenAchievements }: Props) {
+export function Sidebar({ currentView, onNavigate, onOpenAchievements, onSignOut }: Props) {
   return (
     <div className="flex flex-col h-full bg-gray-900 dark:bg-black">
       {/* Logo */}
@@ -42,12 +43,17 @@ export function Sidebar({ currentView, onNavigate, onOpenAchievements }: Props) 
         })}
       </nav>
 
-      {/* Achievements */}
-      <div className="px-3 pb-8 pt-3 border-t border-white/10">
+      {/* Bottom actions */}
+      <div className="px-3 pb-6 pt-3 border-t border-white/10 space-y-0.5">
         <button onClick={onOpenAchievements}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/50 hover:text-white/80 hover:bg-white/8 transition-all">
           <Trophy size={18} className="text-white/40" />
           Achievements
+        </button>
+        <button onClick={onSignOut}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/30 hover:text-white/60 hover:bg-white/8 transition-all">
+          <LogOut size={18} className="text-white/30" />
+          Sign out
         </button>
       </div>
     </div>

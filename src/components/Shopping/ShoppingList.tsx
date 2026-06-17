@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, X, ShoppingCart, Trash2, CheckCircle } from 'lucide-react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCloudStorage } from '../../hooks/useCloudStorage';
 import { triggerAchievementCheck } from '../../achievements/definitions';
 import type { ShoppingItem, FridgeItem, Transaction } from '../../types';
 
@@ -33,9 +33,9 @@ const SHOPPING_TO_STORAGE: Record<string, { location: 'fridge' | 'cupboard'; fri
 };
 
 export function ShoppingList() {
-  const [items, setItems] = useLocalStorage<ShoppingItem[]>('shopping-items', []);
-  const [, setFridgeItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
-  const [, setTransactions] = useLocalStorage<Transaction[]>('transactions', []);
+  const [items, setItems] = useCloudStorage<ShoppingItem[]>('shopping-items', []);
+  const [, setFridgeItems] = useCloudStorage<FridgeItem[]>('fridge-items', []);
+  const [, setTransactions] = useCloudStorage<Transaction[]>('transactions', []);
   const [form, setForm] = useState({ name: '', quantity: '1', category: 'Produce' });
   const [showForm, setShowForm] = useState(false);
   const [catFilter, setCatFilter] = useState('all');

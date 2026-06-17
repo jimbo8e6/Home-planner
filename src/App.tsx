@@ -10,7 +10,11 @@ import { FridgeCupboard } from './components/Fridge/FridgeCupboard';
 import { RecipesView } from './components/Fridge/RecipesView';
 import { AchievementToast } from './components/Achievements/AchievementToast';
 import { AchievementsModal } from './components/Achievements/AchievementsModal';
+import { AuthScreen } from './components/Auth/AuthScreen';
 import { triggerAchievementCheck, trackSectionVisit } from './achievements/definitions';
+import { useAuth } from './contexts/AuthContext';
+import { useUserData } from './contexts/UserDataContext';
+import { Loader2 } from 'lucide-react';
 import type { Achievement } from './achievements/definitions';
 import type { View } from './types';
 
@@ -24,7 +28,18 @@ const PAGE_TITLES: Partial<Record<View, string>> = {
   recipes:   'Recipes',
 };
 
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <Loader2 size={32} className="text-gray-600 animate-spin" />
+    </div>
+  );
+}
+
 export default function App() {
+  const { user, loading: authLoading, signOut } = useAuth();
+  const { dataLoaded } = useUserData();
+
   const [view, setView] = useState<View>('dashboard');
   const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
   const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
@@ -40,7 +55,6 @@ export default function App() {
     return () => window.removeEventListener('achievement-unlocked', handler);
   }, []);
 
-  // Dequeue one at a time
   useEffect(() => {
     if (!currentAchievement && achievementQueue.length > 0) {
       setCurrentAchievement(achievementQueue[0]);
@@ -53,12 +67,19 @@ export default function App() {
     setView(v);
   }, []);
 
+  if (authLoading || (user && !dataLoaded)) return <LoadingScreen />;
+  if (!user) return <AuthScreen />;
+
   const isHome = view === 'dashboard';
 
   const viewContent = (
     <>
       {isHome
-        ? <Dashboard onNavigate={navigate} onOpenAchievements={() => setShowAchievementsModal(true)} />
+        ? <Dashboard
+            onNavigate={navigate}
+            onOpenAchievements={() => setShowAchievementsModal(true)}
+            onSignOut={signOut}
+          />
         : <div className="flex-1 overflow-y-auto p-4">
             {view === 'calendar'  && <CalendarView />}
             {view === 'todo'      && <TodoList />}
@@ -91,18 +112,16 @@ export default function App() {
 
       {/* ── Tablet / desktop layout (md+) ── sidebar + full-width content */}
       <div className="hidden md:flex min-h-screen">
-        {/* Fixed sidebar */}
         <div className="w-56 flex-shrink-0 sticky top-0 h-screen">
           <Sidebar
             currentView={view}
             onNavigate={navigate}
             onOpenAchievements={() => setShowAchievementsModal(true)}
+            onSignOut={signOut}
           />
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-h-screen bg-gray-50 dark:bg-gray-950 relative flex flex-col overflow-hidden">
-          {/* Page heading bar (replaces TopBar) */}
           {!isHome && (
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">{PAGE_TITLES[view]}</h1>

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ChefHat, Loader2, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCloudStorage } from '../../hooks/useCloudStorage';
 import { trackRecipeSearch, triggerAchievementCheck } from '../../achievements/definitions';
 import type { FridgeItem, Recipe } from '../../types';
 
@@ -101,7 +101,7 @@ function RecipeDetail({ recipe, onBack, fridgeItems }: { recipe: Recipe; onBack:
 }
 
 export function RecipesView() {
-  const [allItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
+  const [allItems] = useCloudStorage<FridgeItem[]>('fridge-items', []);
   const [scoredRecipes, setScoredRecipes] = useState<ScoredRecipe[]>([]);
   const [sortMode, setSortMode] = useState<SortMode>('count');
   const [loading, setLoading] = useState(false);
