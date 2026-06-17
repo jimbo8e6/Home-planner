@@ -43,31 +43,6 @@ const FRIDGE_TO_SHOPPING_CATEGORY: Record<string, string> = {
   Condiments: 'Pantry', Leftovers: 'Other', Other: 'Other',
 };
 
-const COMMON_ITEMS: { name: string; category: string; location: 'fridge' | 'cupboard' }[] = [
-  { name: 'Chicken breast', category: 'Meat & Fish', location: 'fridge' },
-  { name: 'Eggs', category: 'Eggs', location: 'fridge' },
-  { name: 'Milk', category: 'Dairy', location: 'fridge' },
-  { name: 'Cheddar', category: 'Dairy', location: 'fridge' },
-  { name: 'Butter', category: 'Dairy', location: 'fridge' },
-  { name: 'Garlic', category: 'Vegetables', location: 'fridge' },
-  { name: 'Onion', category: 'Vegetables', location: 'cupboard' },
-  { name: 'Tomatoes', category: 'Vegetables', location: 'fridge' },
-  { name: 'Carrots', category: 'Vegetables', location: 'fridge' },
-  { name: 'Spinach', category: 'Vegetables', location: 'fridge' },
-  { name: 'Mushrooms', category: 'Vegetables', location: 'fridge' },
-  { name: 'Peppers', category: 'Vegetables', location: 'fridge' },
-  { name: 'Salmon', category: 'Meat & Fish', location: 'fridge' },
-  { name: 'Beef mince', category: 'Meat & Fish', location: 'fridge' },
-  { name: 'Yogurt', category: 'Dairy', location: 'fridge' },
-  { name: 'Lemon', category: 'Fruit', location: 'fridge' },
-  { name: 'Pasta', category: 'Grains & Pasta', location: 'cupboard' },
-  { name: 'Rice', category: 'Grains & Pasta', location: 'cupboard' },
-  { name: 'Potatoes', category: 'Vegetables', location: 'cupboard' },
-  { name: 'Tinned tomatoes', category: 'Condiments', location: 'cupboard' },
-  { name: 'Olive oil', category: 'Condiments', location: 'cupboard' },
-  { name: 'Flour', category: 'Grains & Pasta', location: 'cupboard' },
-  { name: 'Broccoli', category: 'Vegetables', location: 'fridge' },
-];
 
 function ItemEditSheet({ item, onSave, onDelete, onClose, onAddToShoppingList }: {
   item: FridgeItem;
@@ -187,13 +162,7 @@ export function FridgeCupboard() {
     triggerAchievementCheck();
   };
 
-  const addCommon = (item: typeof COMMON_ITEMS[0]) => {
-    if (items.some(i => i.name.toLowerCase() === item.name.toLowerCase())) return;
-    setItems(prev => [...prev, { id: generateId(), name: item.name, category: item.category, quantity: '', location: item.location }]);
-    triggerAchievementCheck();
-  };
-
-  const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id));
+const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id));
   const updateItem = (updated: FridgeItem) => setItems(prev => prev.map(i => i.id === updated.id ? updated : i));
 
   const handleBarcodeScan = async (barcode: string) => {
@@ -235,8 +204,6 @@ export function FridgeCupboard() {
   const fridgeCount = items.filter(i => (i.location ?? 'fridge') === 'fridge').length;
   const cupboardCount = items.filter(i => (i.location ?? 'fridge') === 'cupboard').length;
   const expiringCount = items.filter(i => isExpiringSoon(i.expiryDate) && !isExpired(i.expiryDate)).length;
-
-  const commonForLocation = COMMON_ITEMS.filter(i => i.location === locationFilter);
 
   return (
     <div className="flex flex-col-reverse sm:flex-row gap-4">
@@ -340,7 +307,7 @@ export function FridgeCupboard() {
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 text-gray-400 dark:text-gray-500">
             <span className="text-5xl">{locationFilter === 'fridge' ? '🧊' : '🗄️'}</span>
-            <p className="mt-3 text-sm">Your {locationFilter} is empty. Add items above or use quick-add on the right.</p>
+            <p className="mt-3 text-sm">Your {locationFilter} is empty. Add items above.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -379,26 +346,6 @@ export function FridgeCupboard() {
             })}
           </div>
         )}
-      </div>
-
-      {/* Quick-add sidebar */}
-      <div className="w-full sm:w-56 flex-shrink-0">
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 sticky top-0">
-          <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
-            Quick add to {locationFilter}
-          </p>
-          <div className="space-y-1">
-            {commonForLocation.map(item => {
-              const inStock = items.some(i => i.name.toLowerCase() === item.name.toLowerCase());
-              return (
-                <button key={item.name} onClick={() => addCommon(item)} disabled={inStock}
-                  className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-all ${inStock ? 'text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/20 cursor-default' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-sky-700 dark:hover:text-sky-400'}`}>
-                  {inStock ? '✓ ' : '+ '}{item.name}
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -37,31 +37,6 @@ const INCOME_CATEGORIES = [
 
 const EXPENSE_CATEGORIES = ['Groceries', 'Food & Drink', 'Transport', 'Fuel', 'Healthcare', 'Clothing', 'Entertainment', 'Home & Garden', 'Personal Care', 'Education', 'Gifts', 'Other'];
 
-const PRESET_BILLS: Omit<RegularBill, 'id' | 'active' | 'nextDueDate'>[] = [
-  { name: 'Mortgage', amount: 800, frequency: 'monthly', category: 'Mortgage/Rent', color: '#475569' },
-  { name: 'Rent', amount: 700, frequency: 'monthly', category: 'Mortgage/Rent', color: '#475569' },
-  { name: 'Council Tax', amount: 150, frequency: 'monthly', category: 'Council Tax', color: '#3b82f6' },
-  { name: 'Car Finance', amount: 250, frequency: 'monthly', category: 'Car Finance', color: '#f59e0b' },
-  { name: 'Car Insurance', amount: 600, frequency: 'yearly', category: 'Insurance', color: '#ef4444' },
-  { name: 'Home Insurance', amount: 300, frequency: 'yearly', category: 'Insurance', color: '#ef4444' },
-  { name: 'Life Insurance', amount: 25, frequency: 'monthly', category: 'Insurance', color: '#ef4444' },
-  { name: 'Gas', amount: 60, frequency: 'monthly', category: 'Gas & Electric', color: '#f97316' },
-  { name: 'Electric', amount: 50, frequency: 'monthly', category: 'Gas & Electric', color: '#f97316' },
-  { name: 'Water', amount: 35, frequency: 'monthly', category: 'Water', color: '#0ea5e9' },
-  { name: 'Broadband', amount: 30, frequency: 'monthly', category: 'Internet & Phone', color: '#8b5cf6' },
-  { name: 'Mobile Phone', amount: 25, frequency: 'monthly', category: 'Internet & Phone', color: '#8b5cf6' },
-  { name: 'TV Licence', amount: 169.50, frequency: 'yearly', category: 'TV Licence', color: '#6b7280' },
-];
-
-const PRESET_SUBS: Omit<Subscription, 'id' | 'active' | 'nextBillingDate'>[] = [
-  { name: 'Netflix', amount: 17.99, frequency: 'monthly', category: 'Streaming', color: '#ef4444' },
-  { name: 'Spotify', amount: 11.99, frequency: 'monthly', category: 'Music', color: '#10b981' },
-  { name: 'Amazon Prime', amount: 9.99, frequency: 'monthly', category: 'Streaming', color: '#f59e0b' },
-  { name: 'iCloud', amount: 2.99, frequency: 'monthly', category: 'Cloud', color: '#6366f1' },
-  { name: 'Disney+', amount: 13.99, frequency: 'monthly', category: 'Streaming', color: '#3b82f6' },
-  { name: 'Apple TV+', amount: 8.99, frequency: 'monthly', category: 'Streaming', color: '#374151' },
-  { name: 'YouTube Premium', amount: 13.99, frequency: 'monthly', category: 'Streaming', color: '#ef4444' },
-];
 
 type Tab = 'overview' | 'income' | 'bills' | 'subscriptions' | 'transactions';
 
@@ -383,13 +358,7 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
     triggerAchievementCheck();
   };
 
-  const addPreset = (p: typeof PRESET_BILLS[0]) => {
-    if (bills.some(b => b.name === p.name)) return;
-    setBills(prev => [...prev, { id: generateId(), ...p, nextDueDate: new Date().toISOString().slice(0, 10), active: true }]);
-    triggerAchievementCheck();
-  };
-
-  const toggle = (id: string) => setBills(prev => prev.map(b => b.id === id ? { ...b, active: !b.active } : b));
+const toggle = (id: string) => setBills(prev => prev.map(b => b.id === id ? { ...b, active: !b.active } : b));
   const remove = (id: string) => setBills(prev => prev.filter(b => b.id !== id));
 
   const activeBills = bills.filter(b => b.active);
@@ -452,22 +421,6 @@ function BillsTab({ bills, setBills, monthlyBillsCost }: {
         </div>
       )}
 
-      {/* Presets */}
-      <div className="mb-5">
-        <p className="text-xs text-gray-400 dark:text-gray-500 mb-2 font-semibold uppercase tracking-wide">Quick add common bills</p>
-        <div className="flex flex-wrap gap-2">
-          {PRESET_BILLS.map(p => {
-            const exists = bills.some(b => b.name === p.name);
-            return (
-              <button key={p.name} onClick={() => addPreset(p)} disabled={exists}
-                className={`text-xs px-3 py-1.5 border rounded-full transition-all ${exists ? 'border-gray-100 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20'}`}>
-                {exists ? '✓ ' : '+ '}{p.name}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Bill list */}
       {bills.length === 0 && <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-8">No bills tracked yet. Use the quick-add buttons above or click "Add Bill".</p>}
       <div className="space-y-2">
@@ -519,13 +472,7 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
     triggerAchievementCheck();
   };
 
-  const addPreset = (p: typeof PRESET_SUBS[0]) => {
-    if (subs.some(s => s.name === p.name)) return;
-    setSubs(prev => [...prev, { id: generateId(), ...p, nextBillingDate: new Date().toISOString().slice(0, 10), active: true }]);
-    triggerAchievementCheck();
-  };
-
-  const toggle = (id: string) => setSubs(prev => prev.map(s => s.id === id ? { ...s, active: !s.active } : s));
+const toggle = (id: string) => setSubs(prev => prev.map(s => s.id === id ? { ...s, active: !s.active } : s));
   const remove = (id: string) => setSubs(prev => prev.filter(s => s.id !== id));
   const activeSubs = subs.filter(s => s.active);
 
@@ -576,21 +523,6 @@ function SubscriptionsTab({ subs, setSubs, monthlySubCost }: {
           </div>
         </div>
       )}
-
-      <div className="mb-4">
-        <p className="text-xs text-gray-400 dark:text-gray-500 mb-2 font-semibold uppercase tracking-wide">Quick add popular services</p>
-        <div className="flex flex-wrap gap-2">
-          {PRESET_SUBS.map(p => {
-            const exists = subs.some(s => s.name === p.name);
-            return (
-              <button key={p.name} onClick={() => addPreset(p)} disabled={exists}
-                className={`text-xs px-3 py-1.5 border rounded-full transition-all ${exists ? 'border-gray-100 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-violet-300 hover:text-violet-700 hover:bg-violet-50 dark:hover:bg-violet-900/20'}`}>
-                {exists ? '✓ ' : '+ '}{p.name}
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       <div className="space-y-2">
         {subs.length === 0 && <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-8">No subscriptions tracked yet</p>}
