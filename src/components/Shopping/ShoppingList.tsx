@@ -227,7 +227,7 @@ export function ShoppingList() {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Shop complete! 🎉</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">Transaction added to Finance.</p>
                 {goingToFridge.length + goingToCupboard.length > 0 && (
-                  <p className="text-gray-500 dark:text-gray-400 text-sm">{goingToFridge.length + goingToCupboard.length} items added to your Fridge & Cupboard.</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">{goingToFridge.length + goingToCupboard.length} items added to your Kitchen.</p>
                 )}
                 <button onClick={closeModal} className="mt-6 bg-gray-900 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-gray-700 w-full">Done</button>
               </div>

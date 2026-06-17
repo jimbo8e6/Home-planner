@@ -5,7 +5,7 @@ import type { AchievementCategory } from '../../achievements/definitions';
 const CATEGORY_LABELS: Record<AchievementCategory, string> = {
   todo:     '✅ To-Do',
   shopping: '🛒 Shopping',
-  fridge:   '🧊 Fridge & Recipes',
+  fridge:   '🧊 Kitchen & Recipes',
   finance:  '💰 Finance',
   calendar: '📅 Calendar',
   general:  '🏡 General',

@@ -20,7 +20,7 @@ const PAGE_TITLES: Partial<Record<View, string>> = {
   todo:      'To-Do List',
   shopping:  'Shopping List',
   finance:   'Finance',
-  fridge:    'Fridge & Cupboard',
+  fridge:    'Kitchen',
   recipes:   'Recipes',
 };
 

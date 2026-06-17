@@ -25,7 +25,7 @@ const SECTIONS: {
   { view: 'todo',      label: 'To-Do',             emoji: '✅' },
   { view: 'shopping',  label: 'Shopping',          emoji: '🛒' },
   { view: 'finance',   label: 'Finance',           emoji: '💰' },
-  { view: 'fridge',    label: 'Fridge & Cupboard', emoji: '🧊' },
+  { view: 'fridge',    label: 'Kitchen', emoji: '🧊' },
   { view: 'recipes',   label: 'Recipes',           emoji: '👨‍🍳' },
 ];
 

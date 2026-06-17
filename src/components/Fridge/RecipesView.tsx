@@ -234,7 +234,7 @@ export function RecipesView() {
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <ChefHat size={64} className="text-gray-300 dark:text-gray-600 mb-4" />
           <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">Nothing in the fridge yet</h3>
-          <p className="text-gray-400 dark:text-gray-500 max-w-sm">Add ingredients to your Fridge & Cupboard first, then come back here to find recipes that match what you have.</p>
+          <p className="text-gray-400 dark:text-gray-500 max-w-sm">Add ingredients to your Kitchen first, then come back here to find recipes that match what you have.</p>
         </div>
       )}
 
@@ -248,7 +248,7 @@ export function RecipesView() {
       {searched && !loading && scoredRecipes.length === 0 && !error && (
         <div className="text-center py-16">
           <p className="text-gray-400 dark:text-gray-500 mb-2">No recipes found for your current ingredients.</p>
-          <p className="text-sm text-gray-400 dark:text-gray-500">Try adding more items to your fridge & cupboard.</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500">Try adding more items to your Kitchen.</p>
         </div>
       )}
 

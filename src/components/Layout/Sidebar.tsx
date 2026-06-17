@@ -6,7 +6,7 @@ const NAV_ITEMS: { view: View; label: string; icon: React.ReactNode }[] = [
   { view: 'calendar',   label: 'Calendar',           icon: <Calendar size={18} /> },
   { view: 'todo',       label: 'To-Do',              icon: <CheckSquare size={18} /> },
   { view: 'shopping',   label: 'Shopping',           icon: <ShoppingCart size={18} /> },
-  { view: 'fridge',     label: 'Fridge & Cupboard',  icon: <Package size={18} /> },
+  { view: 'fridge',     label: 'Kitchen',            icon: <Package size={18} /> },
   { view: 'recipes',    label: 'Recipes',            icon: <ChefHat size={18} /> },
   { view: 'finance',    label: 'Finance',            icon: <Wallet size={18} /> },
 ];
