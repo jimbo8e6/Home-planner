@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { TopBar } from './components/Layout/TopBar';
+import { Sidebar } from './components/Layout/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { CalendarView } from './components/Calendar/CalendarView';
 import { TodoList } from './components/Todo/TodoList';
@@ -14,6 +15,7 @@ import type { Achievement } from './achievements/definitions';
 import type { View } from './types';
 
 const PAGE_TITLES: Partial<Record<View, string>> = {
+  dashboard: 'Home',
   calendar:  'Calendar',
   todo:      'To-Do List',
   shopping:  'Shopping List',
@@ -53,43 +55,65 @@ export default function App() {
 
   const isHome = view === 'dashboard';
 
+  const viewContent = (
+    <>
+      {isHome
+        ? <Dashboard onNavigate={navigate} onOpenAchievements={() => setShowAchievementsModal(true)} />
+        : <div className="flex-1 overflow-y-auto p-4">
+            {view === 'calendar'  && <CalendarView />}
+            {view === 'todo'      && <TodoList />}
+            {view === 'shopping'  && <ShoppingList />}
+            {view === 'finance'   && <FinancePlanner />}
+            {view === 'fridge'    && <FridgeCupboard />}
+            {view === 'recipes'   && <RecipesView />}
+          </div>
+      }
+
+      {currentAchievement && (
+        <AchievementToast achievement={currentAchievement} onDismiss={() => setCurrentAchievement(null)} />
+      )}
+      {showAchievementsModal && (
+        <AchievementsModal onClose={() => setShowAchievementsModal(false)} />
+      )}
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950">
-      {/* App shell — phone-width centered, card-style on tablet+ */}
-      <div className="max-w-xl mx-auto min-h-screen bg-gray-50 dark:bg-gray-950 shadow-2xl relative flex flex-col">
-        {isHome ? (
-          <Dashboard
+
+      {/* ── Mobile layout (< md) ── centered card, TopBar for nav */}
+      <div className="md:hidden max-w-xl mx-auto min-h-screen bg-gray-50 dark:bg-gray-950 shadow-2xl relative flex flex-col">
+        {!isHome && (
+          <TopBar title={PAGE_TITLES[view] ?? ''} onBack={() => setView('dashboard')} />
+        )}
+        {viewContent}
+      </div>
+
+      {/* ── Tablet / desktop layout (md+) ── sidebar + full-width content */}
+      <div className="hidden md:flex min-h-screen">
+        {/* Fixed sidebar */}
+        <div className="w-56 flex-shrink-0 sticky top-0 h-screen">
+          <Sidebar
+            currentView={view}
             onNavigate={navigate}
             onOpenAchievements={() => setShowAchievementsModal(true)}
           />
-        ) : (
-          <>
-            <TopBar
-              title={PAGE_TITLES[view] ?? ''}
-              onBack={() => setView('dashboard')}
-            />
-            <div className="flex-1 overflow-y-auto p-4">
-              {view === 'calendar'  && <CalendarView />}
-              {view === 'todo'      && <TodoList />}
-              {view === 'shopping'  && <ShoppingList />}
-              {view === 'finance'   && <FinancePlanner />}
-              {view === 'fridge'    && <FridgeCupboard />}
-              {view === 'recipes'   && <RecipesView />}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-h-screen bg-gray-50 dark:bg-gray-950 relative flex flex-col overflow-hidden">
+          {/* Page heading bar (replaces TopBar) */}
+          {!isHome && (
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">{PAGE_TITLES[view]}</h1>
             </div>
-          </>
-        )}
-
-        {currentAchievement && (
-          <AchievementToast
-            achievement={currentAchievement}
-            onDismiss={() => setCurrentAchievement(null)}
-          />
-        )}
-
-        {showAchievementsModal && (
-          <AchievementsModal onClose={() => setShowAchievementsModal(false)} />
-        )}
+          )}
+          <div className={`flex-1 overflow-y-auto ${isHome ? '' : 'p-6'}`}>
+            {viewContent}
+          </div>
+        </div>
       </div>
+
     </div>
   );
 }

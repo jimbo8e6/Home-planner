@@ -1,50 +1,55 @@
-import { Calendar, CheckSquare, ShoppingCart, DollarSign, Refrigerator, LayoutDashboard, ChefHat } from 'lucide-react';
+import { Home, CheckSquare, ShoppingCart, Package, Wallet, Calendar, ChefHat, Trophy } from 'lucide-react';
 import type { View } from '../../types';
 
-interface SidebarProps {
-  current: View;
-  onNavigate: (view: View) => void;
-}
-
-const navItems: { view: View; label: string; icon: React.ReactNode; color: string }[] = [
-  { view: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} />, color: 'text-violet-600' },
-  { view: 'calendar', label: 'Calendar', icon: <Calendar size={20} />, color: 'text-blue-600' },
-  { view: 'todo', label: 'To-Do', icon: <CheckSquare size={20} />, color: 'text-green-600' },
-  { view: 'shopping', label: 'Shopping', icon: <ShoppingCart size={20} />, color: 'text-orange-600' },
-  { view: 'finance', label: 'Finance', icon: <DollarSign size={20} />, color: 'text-emerald-600' },
-  { view: 'fridge', label: 'Fridge & Cupboard', icon: <Refrigerator size={20} />, color: 'text-sky-600' },
-  { view: 'recipes', label: 'Recipes', icon: <ChefHat size={20} />, color: 'text-rose-600' },
+const NAV_ITEMS: { view: View; label: string; icon: React.ReactNode }[] = [
+  { view: 'dashboard',  label: 'Home',              icon: <Home size={18} /> },
+  { view: 'calendar',   label: 'Calendar',           icon: <Calendar size={18} /> },
+  { view: 'todo',       label: 'To-Do',              icon: <CheckSquare size={18} /> },
+  { view: 'shopping',   label: 'Shopping',           icon: <ShoppingCart size={18} /> },
+  { view: 'fridge',     label: 'Fridge & Cupboard',  icon: <Package size={18} /> },
+  { view: 'recipes',    label: 'Recipes',            icon: <ChefHat size={18} /> },
+  { view: 'finance',    label: 'Finance',            icon: <Wallet size={18} /> },
 ];
 
-export function Sidebar({ current, onNavigate }: SidebarProps) {
+interface Props {
+  currentView: View;
+  onNavigate: (v: View) => void;
+  onOpenAchievements: () => void;
+}
+
+export function Sidebar({ currentView, onNavigate, onOpenAchievements }: Props) {
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col min-h-screen shadow-sm flex-shrink-0">
-      <div className="p-6 border-b border-gray-100">
-        <h1 className="text-xl font-bold text-gray-900">HomeBase</h1>
-        <p className="text-xs text-gray-500 mt-1">Your home, organised</p>
+    <div className="flex flex-col h-full bg-gray-900 dark:bg-black">
+      {/* Logo */}
+      <div className="px-5 pt-8 pb-6 border-b border-white/10">
+        <p className="text-white font-bold text-lg tracking-tight">HomeBase</p>
+        <p className="text-white/40 text-xs mt-0.5">Your home, organised</p>
       </div>
-      <nav className="flex-1 p-4 space-y-1">
-        {navItems.map(({ view, label, icon, color }) => {
-          const active = current === view;
+
+      {/* Nav items */}
+      <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
+        {NAV_ITEMS.map(({ view, label, icon }) => {
+          const active = currentView === view;
           return (
-            <button
-              key={view}
-              onClick={() => onNavigate(view)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                active
-                  ? 'bg-violet-50 text-violet-700 shadow-sm'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              }`}
-            >
-              <span className={active ? 'text-violet-600' : color}>{icon}</span>
+            <button key={view} onClick={() => onNavigate(view)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left ${
+                active ? 'bg-white/15 text-white' : 'text-white/50 hover:text-white/80 hover:bg-white/8'
+              }`}>
+              <span className={active ? 'text-white' : 'text-white/40'}>{icon}</span>
               {label}
             </button>
           );
         })}
       </nav>
-      <div className="p-4 border-t border-gray-100">
-        <p className="text-xs text-gray-400 text-center">HomeBase v1.0</p>
+
+      {/* Achievements */}
+      <div className="px-3 pb-8 pt-3 border-t border-white/10">
+        <button onClick={onOpenAchievements}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/50 hover:text-white/80 hover:bg-white/8 transition-all">
+          <Trophy size={18} className="text-white/40" />
+          Achievements
+        </button>
       </div>
-    </aside>
+    </div>
   );
 }
