@@ -181,9 +181,9 @@ export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: Dashboa
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* ── Hero header */}
-      <div className="bg-gray-900 px-5 pb-14" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 3rem)' }}>
+    <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
+      {/* ── Hero header — stays fixed, never scrolls */}
+      <div className="bg-gray-900 px-5 pb-8 flex-shrink-0" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 3rem)' }}>
         <div className="flex items-center justify-between">
           <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
@@ -210,31 +210,36 @@ export function Dashboard({ onNavigate, onOpenAchievements, onSignOut }: Dashboa
         <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Here's what's on today.</p>
       </div>
 
-      {/* ── Alert strip — overlaps hero with -mt */}
-      <div className="px-4 -mt-6 mb-5">
-        <div className="flex gap-3 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-          {alerts.map(a => (
-            <AlertCard key={a.id} alert={a} onNavigate={onNavigate} />
-          ))}
-        </div>
-      </div>
+      {/* ── Scrollable content */}
+      <div className="flex-1 overflow-y-auto" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
 
-      {/* ── Section bubbles */}
-      <div className="px-4" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 2.5rem)' }}>
-        <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Your home</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {SECTIONS.map(s => (
-            <button
-              key={s.view}
-              onClick={() => onNavigate(s.view)}
-              className="bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-md shadow-gray-900/20 active:scale-95 transition-all duration-150 aspect-square"
-            >
-              <span className="text-4xl leading-none">{s.emoji}</span>
-              <span className="text-white font-bold text-sm text-center leading-tight">{s.label}</span>
-              <span className="text-gray-400 dark:text-gray-500 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
-            </button>
-          ))}
+        {/* Alert strip */}
+        <div className="px-4 pt-4 mb-5">
+          <div className="flex gap-3 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+            {alerts.map(a => (
+              <AlertCard key={a.id} alert={a} onNavigate={onNavigate} />
+            ))}
+          </div>
         </div>
+
+        {/* Section bubbles */}
+        <div className="px-4 pb-6">
+          <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Your home</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {SECTIONS.map(s => (
+              <button
+                key={s.view}
+                onClick={() => onNavigate(s.view)}
+                className="bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 rounded-3xl p-5 flex flex-col items-center justify-center gap-2.5 shadow-md shadow-gray-900/20 active:scale-95 transition-all duration-150 aspect-square"
+              >
+                <span className="text-4xl leading-none">{s.emoji}</span>
+                <span className="text-white font-bold text-sm text-center leading-tight">{s.label}</span>
+                <span className="text-gray-400 dark:text-gray-500 text-xs text-center leading-snug">{bubbleSubtitle[s.view]}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );

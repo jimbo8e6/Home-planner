@@ -103,7 +103,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950">
 
       {/* ── Mobile layout (< md) ── centered card, TopBar for nav */}
-      <div className="md:hidden max-w-xl mx-auto min-h-screen bg-gray-50 dark:bg-gray-950 shadow-2xl relative flex flex-col">
+      <div className="md:hidden max-w-xl mx-auto h-dvh overflow-hidden bg-gray-50 dark:bg-gray-950 shadow-2xl relative flex flex-col">
         {!isHome && (
           <TopBar title={PAGE_TITLES[view] ?? ''} onBack={() => setView('dashboard')} />
         )}
