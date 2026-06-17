@@ -234,14 +234,14 @@ const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id
       <div className="flex-1">
         {/* Location toggle */}
         <div className="mb-5">
-          <div className="flex bg-gray-100 dark:bg-gray-800 p-1.5 rounded-2xl gap-1.5 mb-3">
+          <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-2xl gap-1 mb-3">
             {([
               { id: 'fridge',   label: '🧊 Fridge',   count: fridgeCount },
               { id: 'cupboard', label: '🗄️ Cupboard', count: cupboardCount },
               { id: 'freezer',  label: '❄️ Freezer',  count: freezerCount },
             ] as const).map(tab => (
               <button key={tab.id} onClick={() => { setLocationFilter(tab.id); setForm(f => ({ ...f, location: tab.id })); }}
-                className={`flex-1 py-3.5 rounded-xl text-sm font-bold transition-all ${locationFilter === tab.id ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${locationFilter === tab.id ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
                 {tab.label} <span className="ml-1 text-xs font-normal text-gray-400 dark:text-gray-500">({tab.count})</span>
               </button>
             ))}
