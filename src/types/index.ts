@@ -64,7 +64,7 @@ export interface FridgeItem {
   name: string;
   category: string;
   quantity: string;
-  location: 'fridge' | 'cupboard';
+  location: 'fridge' | 'cupboard' | 'freezer';
   expiryDate?: string;
 }
 

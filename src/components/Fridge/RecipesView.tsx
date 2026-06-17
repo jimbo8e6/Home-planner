@@ -111,6 +111,7 @@ export function RecipesView() {
 
   const fridgeItems = allItems.filter(i => (i.location ?? 'fridge') === 'fridge');
   const cupboardItems = allItems.filter(i => (i.location ?? 'fridge') === 'cupboard');
+  const freezerItems = allItems.filter(i => i.location === 'freezer');
 
   const findRecipes = useCallback(async () => {
     if (allItems.length === 0) return;
@@ -201,6 +202,18 @@ export function RecipesView() {
             <p className="text-xs text-gray-400 dark:text-gray-500">{cupboardItems.slice(0, 3).map(i => i.name).join(', ')}{cupboardItems.length > 3 ? ` +${cupboardItems.length - 3} more` : ''}</p>
           </div>
         </div>
+        {freezerItems.length > 0 && (
+          <>
+            <div className="w-px h-10 bg-gray-200 dark:bg-gray-700" />
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">❄️</span>
+              <div>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{freezerItems.length} freezer items</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{freezerItems.slice(0, 3).map(i => i.name).join(', ')}{freezerItems.length > 3 ? ` +${freezerItems.length - 3} more` : ''}</p>
+              </div>
+            </div>
+          </>
+        )}
         <div className="ml-auto">
           <button onClick={findRecipes} disabled={loading || allItems.length === 0}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${allItems.length === 0 ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-gray-700 active:scale-95'}`}>

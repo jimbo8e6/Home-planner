@@ -55,7 +55,7 @@ function ItemEditSheet({ item, onSave, onDelete, onClose, onAddToShoppingList }:
     name: item.name,
     quantity: item.quantity || '',
     category: item.category,
-    location: item.location as 'fridge' | 'cupboard',
+    location: item.location as 'fridge' | 'cupboard' | 'freezer',
     expiryDate: item.expiryDate || '',
   });
 
@@ -82,14 +82,12 @@ function ItemEditSheet({ item, onSave, onDelete, onClose, onAddToShoppingList }:
           <div>
             <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Location</label>
             <div className="flex gap-2">
-              <button onClick={() => setForm(f => ({ ...f, location: 'fridge' }))}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${form.location === 'fridge' ? 'border-gray-900 dark:border-gray-100 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-500'}`}>
-                🧊 Fridge
-              </button>
-              <button onClick={() => setForm(f => ({ ...f, location: 'cupboard' }))}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${form.location === 'cupboard' ? 'border-gray-900 dark:border-gray-100 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-500'}`}>
-                🗄️ Cupboard
-              </button>
+              {(['fridge', 'cupboard', 'freezer'] as const).map(loc => (
+                <button key={loc} onClick={() => setForm(f => ({ ...f, location: loc }))}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${form.location === loc ? 'border-gray-900 dark:border-gray-100 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-500'}`}>
+                  {loc === 'fridge' ? '🧊' : loc === 'cupboard' ? '🗄️' : '❄️'} {loc.charAt(0).toUpperCase() + loc.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -141,10 +139,10 @@ function ItemEditSheet({ item, onSave, onDelete, onClose, onAddToShoppingList }:
 export function FridgeCupboard() {
   const [items, setItems] = useLocalStorage<FridgeItem[]>('fridge-items', []);
   const [, setShoppingItems] = useLocalStorage<ShoppingItem[]>('shopping-items', []);
-  const [locationFilter, setLocationFilter] = useState<'fridge' | 'cupboard'>('fridge');
+  const [locationFilter, setLocationFilter] = useState<'fridge' | 'cupboard' | 'freezer'>('fridge');
   const [searchQuery, setSearchQuery] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: '', category: 'Vegetables', quantity: '', expiryDate: '', location: 'fridge' as 'fridge' | 'cupboard' });
+  const [form, setForm] = useState({ name: '', category: 'Vegetables', quantity: '', expiryDate: '', location: 'fridge' as 'fridge' | 'cupboard' | 'freezer' });
   const [editingItem, setEditingItem] = useState<FridgeItem | null>(null);
   const [showScanner, setShowScanner] = useState(false);
   const [barcodeLoading, setBarcodeLoading] = useState(false);
@@ -203,6 +201,7 @@ const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id
 
   const fridgeCount = items.filter(i => (i.location ?? 'fridge') === 'fridge').length;
   const cupboardCount = items.filter(i => (i.location ?? 'fridge') === 'cupboard').length;
+  const freezerCount = items.filter(i => i.location === 'freezer').length;
   const expiringCount = items.filter(i => isExpiringSoon(i.expiryDate) && !isExpired(i.expiryDate)).length;
 
   return (
@@ -236,14 +235,16 @@ const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id
         {/* Location toggle */}
         <div className="flex items-center gap-3 mb-5">
           <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl gap-1">
-            <button onClick={() => { setLocationFilter('fridge'); setForm(f => ({ ...f, location: 'fridge' })); }}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === 'fridge' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
-              🧊 Fridge <span className="ml-1 text-xs text-gray-400 dark:text-gray-500">({fridgeCount})</span>
-            </button>
-            <button onClick={() => { setLocationFilter('cupboard'); setForm(f => ({ ...f, location: 'cupboard' })); }}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === 'cupboard' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
-              🗄️ Cupboard <span className="ml-1 text-xs text-gray-400 dark:text-gray-500">({cupboardCount})</span>
-            </button>
+            {([
+              { id: 'fridge',   label: '🧊 Fridge',   count: fridgeCount },
+              { id: 'cupboard', label: '🗄️ Cupboard', count: cupboardCount },
+              { id: 'freezer',  label: '❄️ Freezer',  count: freezerCount },
+            ] as const).map(tab => (
+              <button key={tab.id} onClick={() => { setLocationFilter(tab.id); setForm(f => ({ ...f, location: tab.id })); }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${locationFilter === tab.id ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}>
+                {tab.label} <span className="ml-1 text-xs text-gray-400 dark:text-gray-500">({tab.count})</span>
+              </button>
+            ))}
           </div>
           {expiringCount > 0 && (
             <div className="flex items-center gap-1.5 text-amber-600 text-sm bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
@@ -286,10 +287,11 @@ const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id
                 className="flex-1 text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 focus:outline-none">
                 {FRIDGE_CATEGORIES.map(c => <option key={c}>{c}</option>)}
               </select>
-              <select value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value as 'fridge' | 'cupboard' }))}
+              <select value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value as 'fridge' | 'cupboard' | 'freezer' }))}
                 className="text-sm border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 focus:outline-none">
                 <option value="fridge">🧊 Fridge</option>
                 <option value="cupboard">🗄️ Cupboard</option>
+                <option value="freezer">❄️ Freezer</option>
               </select>
               {form.location === 'fridge' && (
                 <input type="date" value={form.expiryDate} onChange={e => setForm(f => ({ ...f, expiryDate: e.target.value }))}
@@ -306,7 +308,7 @@ const removeItem = (id: string) => setItems(prev => prev.filter(i => i.id !== id
         {/* Items grouped by category */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 text-gray-400 dark:text-gray-500">
-            <span className="text-5xl">{locationFilter === 'fridge' ? '🧊' : '🗄️'}</span>
+            <span className="text-5xl">{locationFilter === 'fridge' ? '🧊' : locationFilter === 'freezer' ? '❄️' : '🗄️'}</span>
             <p className="mt-3 text-sm">Your {locationFilter} is empty. Add items above.</p>
           </div>
         ) : (
