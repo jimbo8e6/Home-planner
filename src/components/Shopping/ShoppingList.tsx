@@ -163,19 +163,6 @@ export function ShoppingList() {
         </div>
       )}
 
-      {/* Quick-add common items */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {['Milk', 'Eggs', 'Bread', 'Butter', 'Apples', 'Pasta', 'Rice', 'Chicken'].map(name => {
-          const cat = { Milk: 'Dairy', Eggs: 'Dairy', Bread: 'Bakery', Butter: 'Dairy', Apples: 'Produce', Pasta: 'Pantry', Rice: 'Pantry', Chicken: 'Meat' }[name]!;
-          return (
-            <button key={name} onClick={() => setItems(prev => [...prev, { id: generateId(), name, quantity: '1', category: cat, checked: false, addedAt: new Date().toISOString() }])}
-              className="text-xs px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-gray-600 dark:text-gray-300 hover:bg-orange-50 hover:border-orange-200 hover:text-orange-700 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:hover:text-white transition-all">
-              + {name}
-            </button>
-          );
-        })}
-      </div>
-
       {/* Category filter */}
       <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
         {['all', ...CATEGORIES.filter(c => items.some(i => i.category === c))].map(c => (
