@@ -61,7 +61,7 @@ export function SettingsModal({ onClose }: Props) {
       className="absolute inset-0 bg-black/50 z-50 flex flex-col"
       onClick={e => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white dark:bg-gray-900 flex-1 overflow-y-auto rounded-t-3xl mt-14">
+      <div className="bg-white dark:bg-gray-900 flex-1 overflow-y-auto rounded-t-3xl" style={{ marginTop: 'max(calc(env(safe-area-inset-top) + 0.5rem), 3.5rem)' }}>
 
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-5 pt-5 pb-4 flex items-center justify-between z-10">

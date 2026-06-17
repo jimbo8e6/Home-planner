@@ -187,7 +187,7 @@ export function Dashboard({ onNavigate, onOpenAchievements, onOpenSettings, onSi
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-950">
       {/* ── Hero header — stays fixed, never scrolls */}
-      <div className="bg-gray-900 px-5 pb-8 flex-shrink-0" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 3rem)' }}>
+      <div className="bg-gray-900 px-5 pb-8 flex-shrink-0" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)' }}>
         <div className="flex items-center justify-between">
           <p className="text-gray-400 dark:text-gray-500 text-sm font-medium tracking-wide">
             {format(today, 'EEEE, d MMMM yyyy')}
